@@ -4,6 +4,13 @@ import time
 
 class scraper:
 
+    def __init__(self):
+        """
+        initialises the properties dictionary
+        """
+        self.property_links = []
+        self.dict_properties = {'Price': [], 'Address': [], 'Bedrooms': [], 'Description': []}
+    
     def load_and_accept_cookies(self) -> webdriver.Chrome:
         '''
         Open Zoopla and accept the cookies
@@ -34,21 +41,56 @@ class scraper:
         return self.driver 
 
     def get_page_links(self):
-            
+        """
+        scrapes the current page for all the properties (regular listings) and puts all the links in a page
+        """    
         prop_container = self.driver.find_element(by=By.XPATH, value='//div[@data-testid="regular-listings"]') # XPath corresponding to the Container
         prop_list = prop_container.find_elements(by=By.XPATH, value='./div') 
-        self.link_list = []
+        
 
         for house_property in prop_list:
             a_tag = house_property.find_element(by=By.TAG_NAME, value='a')
             link = a_tag.get_attribute('href')
-            self.link_list.append(link)
+            self.property_links.append(link)
             
-        print(f'There are {len(self.link_list)} properties in this page')
-        print(self.link_list)
+        print(f'There are {len(self.property_links)} properties in this page')
+        #print(self.link_list)
+        time.sleep(1)
+
+    def next_page(self):
+
+        pagination = self.driver.find_element(by=By.XPATH, value='//div[@data-testid="pagination"]') # XPath corresponding to the pagination section
+        pagination = pagination.find_element(by=By.CLASS_NAME, value = 'e1x1tr228 css-1gny8z8-PaginationContainer-Pagination eaoxhri0')
+        next_page_button = pagination.find_element(by=By.XPATH, value='//ul[@class="css-qhg1xn-PaginationItemPreviousAndNext-PaginationItemNext eaoxhri2"]')
+        a_tag = next_page_button.find_element(by=By.TAG_NAME, value='a')
+        link = a_tag.get_attribute('href')
+        self.page_links.append(link)
+
+    def get_property_details(self,property_link):
+        """
+        Takes the property URL and scrapes to find the Price, address, number of bedrooms and descripton and adds them to the dictionary of properties
+        """
+        self.driver.get(property_link)
+        price = self.driver.find_element(by=By.XPATH, value='//p[@data-testid="price"]').text
+        self.dict_properties['Price'].append(price)
+        address = self.driver.find_element(by=By.XPATH, value='//address[@data-testid="address-label"]').text
+        self.dict_properties['Address'].append(address)
+        rooms = self.driver.find_element(by=By.XPATH, value='//div[@class="c-PJLV c-PJLV-iiNveLf-css"]')
+        bedrooms = rooms.find_element(by=By.XPATH, value='//div[@class="c-cbuYEU c-cbuYEU-egQFzo-isAnAttribute-true c-cbuYEU-iPJLV-css"]').text
+        self.dict_properties['Bedrooms'].append(bedrooms)
+        div_tag = self.driver.find_element(by=By.XPATH, value='//div[@data-testid="truncated_text_container"]')
+        span_tag = div_tag.find_element(by=By.XPATH, value='.//span')
+        description = span_tag.text
+        self.dict_properties['Description'].append(description)
 
 if __name__ == "__main__":
     
     lndn_houses = scraper()
     lndn_houses.load_and_accept_cookies()
     lndn_houses.get_page_links()
+
+    lndn_houses.next_page()
+    # for i in (lndn_houses.property_links):
+    #     lndn_houses.get_property_details(i)
+
+    # print(lndn_houses.dict_properties)
