@@ -1,8 +1,11 @@
+from cgitb import text
 from itertools import count
+from lib2to3.pgen2 import driver
 from multiprocessing.sharedctypes import Value
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
+from tabulate import tabulate
 
 class scraper:
 
@@ -10,7 +13,7 @@ class scraper:
         """
         initialises the starting variables
         """
-
+        self.crags = {'Name':[], 'URL':[], 'RockType':[]}
         self.climb = {'Name': [], 'Crag': [], 'Grade': [], 'Stars': [], 'Type': [], 'Guidebook': [], 'Description': []}
     
     def load_and_accept_cookies(self) -> webdriver.Chrome:
@@ -51,7 +54,50 @@ class scraper:
         print(f"{len(self.guidebook_links)} guidebooks in print in {input_country}")
 
     def get_crags(self,guidebook_URL):
+        """
+        scrapes the guidebook page for all the crags and stores there name,URL and rocktype
+        """   
         self.driver.get(guidebook_URL)
+        print(guidebook_URL)
+        try:
+            crag_tables = self.driver.find_elements(By.CLASS_NAME,"col-sm-6") 
+            rows = []
+            headers = []
+            for table in crag_tables:
+                rows = rows + table.find_elements(By.TAG_NAME, "tr")
+                headers = headers + table.find_elements(By.CLASS_NAME, 'hdr1')
+
+            crag_rows = [x for x in rows if x not in headers] #Remove headers from rows
+
+            for row in crag_rows:
+                    a_tag = row.find_element(By.TAG_NAME, 'a')
+                    self.crags['URL'].append(a_tag.get_attribute('href'))
+                    self.crags['Name'].append(a_tag.text)
+                    self.crags['RockType'].append(row.find_element(By.XPATH, './td[3]').text)
+        except:
+            print("no crags for this guidebook")
+        time.sleep(1)
+
+    def get_climbs(self,crag_link):
+        self.driver.get(crag_link)
+        table = self.driver.find_element(By.ID, 'climb_table')
+        table_body = table.find_element(By.TAG_NAME, 'tbody')
+        rows = table_body.find_elements(By.TAG_NAME, 'tr')
+        buttress_list = table_body.find_elements(By.XPATH, './/tr[@class ="dtrg-group buttress_header dtrg-start dtrg-level-0"]')
+        
+        for row in rows:
+            if row in buttress_list:
+                buttress = row.find_element(By.TAG_NAME, 'h5').text
+                print(buttress)
+            elif row not in buttress_list:
+                a_tag = row.find_element(By.XPATH, './/*[@class = "small not-small-md main_link"]')
+                print(a_tag.text)
+            else:
+                print("what is this row????")
+
+
+        
+
 
 
 
@@ -61,3 +107,6 @@ if __name__ == "__main__":
     eng_climbs = scraper()
     eng_climbs.load_and_accept_cookies()
     eng_climbs.get_guidebooks("England")
+    eng_climbs.get_crags(eng_climbs.guidebook_links[0])
+    print(eng_climbs.crags.get('URL',1)[0])
+    eng_climbs.get_climbs(eng_climbs.crags.get('URL',1)[0])
