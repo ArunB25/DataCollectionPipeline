@@ -1,4 +1,5 @@
 from itertools import count
+from multiprocessing.sharedctypes import Value
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
@@ -28,20 +29,32 @@ class scraper:
         """
         scrapes the current page for all the guidebooks of the specified country 
         """    
-        country_list = self.driver.find_elements(By.XPATH, f'//div[@class = "card mb-2"]')
+        country_list = self.driver.find_elements(By.XPATH, '//div[@class = "card mb-2"]')
 
         for country in country_list:
-            a_tag = country.find_element(by=By.TAG_NAME, value='a')
+            a_tag = country.find_element(By.TAG_NAME, 'a')
             a_text = a_tag.text
             if input_country.lower() in a_text.lower():
-                print(a_text)
+                
                 break
         
-        guidebook_list = country.find_elements(By.XPATH, f'//div[@class = "card mb-2"]')
+        print(country.find_element(By.TAG_NAME, 'a').text)
+        guidebook_card = country.find_element(By.XPATH, '//div[@class = "card-body"]')
+        guidebook_list = guidebook_card.find_element(By.TAG_NAME, "ul")
+        guidebooks = guidebook_list.find_elements(By.TAG_NAME, "li")
+        print(len(guidebooks)) # should contain 263 guidebooks????
+       
+       
+       # OutofPrint_list = guidebook_card.find_elements(By.XPATH, '//li[@title = "Out of print"]')
+ 
+       #print(len(OutofPrint_list))
 
+        # OutofPrint_links = []
+        # for guide in OutofPrint_list:
+        #     a_tag = guide.find_element(by=By.TAG_NAME, value='a')
+        #     OutofPrint_links.append(a_tag.get_attribute('href'))
 
-
-
+        # print((OutofPrint_links))
 
 
     def get_property_details(self,property_link):
