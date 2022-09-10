@@ -20,7 +20,7 @@ class scraper:
         self.driver = webdriver.Chrome() 
         URL = "https://www.ukclimbing.com/logbook/books/"
         self.driver.get(URL)
-        time.sleep(3) 
+        time.sleep(1) 
         accept_cookies_button = self.driver.find_element(By.XPATH, '//*[@class = "btn btn-primary"]')
         accept_cookies_button.click()
         time.sleep(1)
@@ -31,62 +31,30 @@ class scraper:
         """    
         country_list = self.driver.find_elements(By.XPATH, '//div[@class = "card mb-2"]')
 
-        for country in country_list:
+        for country in country_list: #search through all countrys cards
             a_tag = country.find_element(By.TAG_NAME, 'a')
             a_text = a_tag.text
-            if input_country.lower() in a_text.lower():
-                
+            if input_country.lower() in a_text.lower():  #if country matches inputed country break
                 break
         
         print(country.find_element(By.TAG_NAME, 'a').text)
-        guidebook_card = country.find_element(By.XPATH, '//div[@class = "card-body"]')
-        guidebook_list = guidebook_card.find_element(By.TAG_NAME, "ul")
-        guidebooks = guidebook_list.find_elements(By.TAG_NAME, "li")
-        print(len(guidebooks)) # should contain 263 guidebooks????
-       
-       
-       # OutofPrint_list = guidebook_card.find_elements(By.XPATH, '//li[@title = "Out of print"]')
- 
-       #print(len(OutofPrint_list))
+        guidebook_card = country.find_element(By.XPATH, './/div[@class = "card-body"]')
+        all_guidebooks = guidebook_card.find_elements(By.TAG_NAME, 'li')    #get list of all guide books in specified country
+        OutofPrint_list = guidebook_card.find_elements(By.XPATH, './/li[@title = "Out of print"]')  #get list of all out of print guide books in specified country
+        guidebooks_inprint = [x for x in all_guidebooks if x not in OutofPrint_list] #remove guide books that are no longer being printed
 
-        # OutofPrint_links = []
-        # for guide in OutofPrint_list:
-        #     a_tag = guide.find_element(by=By.TAG_NAME, value='a')
-        #     OutofPrint_links.append(a_tag.get_attribute('href'))
+        self.guidebook_links = []
+        for guide in guidebooks_inprint: #gets links for all guidebooks
+            a_tag = guide.find_element(by=By.TAG_NAME, value='a')
+            self.guidebook_links.append(a_tag.get_attribute('href'))
 
-        # print((OutofPrint_links))
+        print(f"{len(self.guidebook_links)} guidebooks in print in {input_country}")
+
+    def get_crags(self,guidebook_URL):
+        self.driver.get(guidebook_URL)
 
 
-    def get_property_details(self,property_link):
-        """
-        Takes the property URL and scrapes to find the Price, address, number of bedrooms and descripton and adds them to the dictionary of properties
-        """
-        self.driver.get(property_link)
-        try:
-            price = self.driver.find_element(by=By.XPATH, value='//p[@data-testid="price"]').text
-            self.dict_properties['Price'].append(price)
-        except:
-            self.dict_properties['Price'].append("NA")
-        try:
-            address = self.driver.find_element(by=By.XPATH, value='//address[@data-testid="address-label"]').text
-            self.dict_properties['Address'].append(address)
-        except:
-            self.dict_properties['Address'].append("NA")
-        try:
-            rooms = self.driver.find_element(by=By.XPATH, value='//div[@class="c-PJLV c-PJLV-iiNveLf-css"]')
-            bedrooms = rooms.find_element(by=By.XPATH, value='//div[@class="c-cbuYEU c-cbuYEU-egQFzo-isAnAttribute-true c-cbuYEU-iPJLV-css"]').text
-            self.dict_properties['Bedrooms'].append(bedrooms)
-        except:
-            self.dict_properties['Bedrooms'].append("NA")
-        try:
-            div_tag = self.driver.find_element(by=By.XPATH, value='//div[@data-testid="truncated_text_container"]')
-            span_tag = div_tag.find_element(by=By.XPATH, value='.//span')
-            description = span_tag.text
-            self.dict_properties['Description'].append(description)
-        except:
-            self.dict_properties['Description'].append("NA")
-        
-        time.sleep(1)
+
 
 if __name__ == "__main__":
     
