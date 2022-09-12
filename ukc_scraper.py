@@ -1,3 +1,4 @@
+from ast import main
 from cgitb import text
 from itertools import count
 from lib2to3.pgen2 import driver
@@ -8,13 +9,6 @@ import time
 from tabulate import tabulate
 
 class scraper:
-
-    def __init__(self):
-        """
-        initialises the starting variables
-        """
-        self.crags = {'Name':[], 'URL':[], 'RockType':[]}
-        self.climb = {'Name': [], 'Crag': [], 'Grade': [], 'Stars': [], 'Type': [], 'Guidebook': [], 'Description': []}
     
     def load_and_accept_cookies(self) -> webdriver.Chrome:
         '''
@@ -55,10 +49,9 @@ class scraper:
 
     def get_crags(self,guidebook_URL):
         """
-        scrapes the guidebook page for all the crags and stores there name,URL and rocktype
+        scrapes the guidebook page for all the crags and returns a dictionary, where each item is the crags name and init is a list with the URL, Rocktype and empty route dictionary
         """   
         self.driver.get(guidebook_URL)
-        print(guidebook_URL)
         try:
             crag_tables = self.driver.find_elements(By.CLASS_NAME,"col-sm-6") 
             rows = []
@@ -68,45 +61,65 @@ class scraper:
                 headers = headers + table.find_elements(By.CLASS_NAME, 'hdr1')
 
             crag_rows = [x for x in rows if x not in headers] #Remove headers from rows
-
+            crags = {}
+            crag_routes = {}
             for row in crag_rows:
                     a_tag = row.find_element(By.TAG_NAME, 'a')
-                    self.crags['URL'].append(a_tag.get_attribute('href'))
-                    self.crags['Name'].append(a_tag.text)
-                    self.crags['RockType'].append(row.find_element(By.XPATH, './td[3]').text)
+                    crag_url = a_tag.get_attribute('href')
+                    crag_name = a_tag.text
+                    crag_rocktype = row.find_element(By.XPATH, './td[3]').text
+                    crags[crag_name] = [crag_url,crag_rocktype,crag_routes]
         except:
             print("no crags for this guidebook")
         time.sleep(1)
+        return(crags)
 
-    def get_climbs(self,crag_link):
-        self.driver.get(crag_link)
+    def get_routes(self,crag):
+        """
+        scrapes the crag page for all the route and returns a dictionary of buttresses which contain a dictionary of every route at the buttress
+        """
+        crag_URL = crag[0]
+        self.driver.get(crag_URL)
         table = self.driver.find_element(By.ID, 'climb_table')
         table_body = table.find_element(By.TAG_NAME, 'tbody')
         rows = table_body.find_elements(By.TAG_NAME, 'tr')
         buttress_list = table_body.find_elements(By.XPATH, './/tr[@class ="dtrg-group buttress_header dtrg-start dtrg-level-0"]')
-        
+        buttress_dict = {}
+        route_details = []
         for row in rows:
             if row in buttress_list:
+                if len(route_details) != 0:
+                    buttress_dict[buttress] = routes_dict
                 buttress = row.find_element(By.TAG_NAME, 'h5').text
-                print(buttress)
+                routes_dict = {}
             elif row not in buttress_list:
-                a_tag = row.find_element(By.XPATH, './/*[@class = "small not-small-md main_link"]')
-                print(a_tag.text)
+                route_details = []
+                a_tag = row.find_element(By.XPATH, './/*[@class = "small not-small-md main_link "]')
+                route_name = a_tag.text
+                route_details.append(a_tag.get_attribute('href'))
+                climbing_type= row.find_element(By.XPATH, './/td[@class = " datatable_column_type"]')
+                route_details.append(climbing_type.find_element(By.TAG_NAME, 'i').get_attribute('title'))
+                grade = row.find_element(By.XPATH, './/td[@class = " datatable_column_grade small not-small-md"]')
+                route_details.append(grade.find_element(By.TAG_NAME, "span").text)
+                stars= row.find_element(By.XPATH, './/td[@class = " datatable_column_star"]')
+                try:    
+                    route_details.append(stars.find_element(By.TAG_NAME, 'i').get_attribute('title'))
+                    
+                except:
+                    route_details.append("None")
+                routes_dict[route_name] = route_details
             else:
                 print("what is this row????")
-
-
-        
-
-
-
-
+        return(buttress_dict)
 
 if __name__ == "__main__":
     
     eng_climbs = scraper()
     eng_climbs.load_and_accept_cookies()
     eng_climbs.get_guidebooks("England")
-    eng_climbs.get_crags(eng_climbs.guidebook_links[0])
-    print(eng_climbs.crags.get('URL',1)[0])
-    eng_climbs.get_climbs(eng_climbs.crags.get('URL',1)[0])
+    eng_climbs.crags = eng_climbs.get_crags(eng_climbs.guidebook_links[0])
+    first_crag = list(eng_climbs.crags.keys())[0]
+    eng_climbs.crags[first_crag][2] = eng_climbs.get_routes(eng_climbs.crags[first_crag])
+    print(eng_climbs.crags[first_crag])
+
+    
