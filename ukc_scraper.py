@@ -3,6 +3,7 @@ from cgitb import text
 from itertools import count
 from lib2to3.pgen2 import driver
 from multiprocessing.sharedctypes import Value
+from turtle import tilt, title
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
@@ -112,6 +113,25 @@ class scraper:
                 print("what is this row????")
         return(buttress_dict)
 
+    def get_cragPics(self,crag):
+        crag_URL = crag[0]
+        self.driver.get(crag_URL)
+        pics_tab = self.driver.find_element(By.ID, 'show_photos').get_attribute('href')
+        self.driver.get(pics_tab)
+        self.driver.refresh()
+        time.sleep(1)
+        photos_list = self.driver.find_elements(By.XPATH, '//a[@class = "photoswipe"]')
+        images = {}
+        for photo in photos_list:
+            photo_src = photo.get_attribute('data-image')
+            img_thumbnail = photo.find_element(By.CLASS_NAME, 'img-fluid')
+            title = (img_thumbnail.get_attribute('alt')).split('<',1)[0]
+            images[title] = photo_src
+        
+        print(images)
+
+
+
 if __name__ == "__main__":
     
     eng_climbs = scraper()
@@ -119,7 +139,10 @@ if __name__ == "__main__":
     eng_climbs.get_guidebooks("England")
     eng_climbs.crags = eng_climbs.get_crags(eng_climbs.guidebook_links[0])
     first_crag = list(eng_climbs.crags.keys())[0]
-    eng_climbs.crags[first_crag][2] = eng_climbs.get_routes(eng_climbs.crags[first_crag])
-    print(eng_climbs.crags[first_crag])
+
+    eng_climbs.get_cragPics(eng_climbs.crags[first_crag])
+
+    #eng_climbs.crags[first_crag][2] = eng_climbs.get_routes(eng_climbs.crags[first_crag])
+    #print(eng_climbs.crags[first_crag])
 
     
