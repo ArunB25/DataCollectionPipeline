@@ -15,7 +15,7 @@ class scraper:
     
     def load_and_accept_cookies(self) -> webdriver.Chrome:
         '''
-        Open UKC and accept the cookies. Using the chrome web driver
+        Opens on a chrome web drive UKC and accept the cookies.
         '''
         self.driver = webdriver.Chrome() 
         URL = "https://www.ukclimbing.com/logbook/books/"
@@ -27,46 +27,62 @@ class scraper:
 
     def get_guidebooks(self,input_country):
         """
-        scrapes the current page for all the guidebooks of the specified country 
+        scrapes the current page for all the guidebooks of the specified country and returns a list of there URLs
         """    
-        country_list = self.driver.find_elements(By.XPATH, '//div[@class = "card mb-2"]')
+        country_element = self.does_guidebook_country_exist(input_country)
+        if country_element == "country not found":
+            print("country not found")
+            return("country not found")
+        else:
+            print(country_element.find_element(By.TAG_NAME, 'a').text)
+            guidebook_card = country_element.find_element(By.XPATH, './/div[@class = "card-body"]')
+            all_guidebooks = guidebook_card.find_elements(By.TAG_NAME, 'li')    #get list of all guide books in specified country
+            OutofPrint_list = guidebook_card.find_elements(By.XPATH, './/li[@title = "Out of print"]')  #get list of all out of print guide books in specified country
+            guidebooks_inprint = [x for x in all_guidebooks if x not in OutofPrint_list] #remove guide books that are no longer being printed
 
-        for country in country_list: #search through all countrys cards
-            a_tag = country.find_element(By.TAG_NAME, 'a')
-            a_text = a_tag.text
-            if input_country.lower() in a_text.lower():  #if country matches inputed country break
-                break
-        
-        print(country.find_element(By.TAG_NAME, 'a').text)
-        guidebook_card = country.find_element(By.XPATH, './/div[@class = "card-body"]')
-        all_guidebooks = guidebook_card.find_elements(By.TAG_NAME, 'li')    #get list of all guide books in specified country
-        OutofPrint_list = guidebook_card.find_elements(By.XPATH, './/li[@title = "Out of print"]')  #get list of all out of print guide books in specified country
-        guidebooks_inprint = [x for x in all_guidebooks if x not in OutofPrint_list] #remove guide books that are no longer being printed
+            guidebook_links = []
+            for guide in guidebooks_inprint: #gets links for all guidebooks
+                a_tag = guide.find_element(by=By.TAG_NAME, value='a')
+                guidebook_links.append(a_tag.get_attribute('href'))
 
-        self.guidebook_links = []
-        for guide in guidebooks_inprint: #gets links for all guidebooks
-            a_tag = guide.find_element(by=By.TAG_NAME, value='a')
-            self.guidebook_links.append(a_tag.get_attribute('href'))
+            print(f"{len(guidebook_links)} guidebooks in print in {input_country}")
+            return(guidebook_links)
+            
 
-        print(f"{len(self.guidebook_links)} guidebooks in print in {input_country}")
+    def does_guidebook_country_exist(self,input_country):  
+        """
+        searches for the input country through the list of countries with guidebooks
+        """
+        if input_country.isalpha():
+            country_list = self.driver.find_elements(By.XPATH, '//div[@class = "card mb-2"]')
+            for country in country_list: #search through all countrys cards
+                a_tag = country.find_element(By.TAG_NAME, 'a')
+                a_text = (a_tag.text).split(' ',1)[0]
+                if input_country.lower() in a_text.lower():  #if country matches inputed country break
+                    print(a_text)
+                    return(country)              
+            return("country not found")
+        else:
+            print("input not valid")
+            return("country not found")
 
     def get_crags(self,guidebook_URL):
         """
-        scrapes the guidebook page for all the crags and returns a dictionary, where each item is the crags name and init is a list with the URL, Rocktype and empty route dictionary
+        scrapes the guidebook page for all the crags and returns a dictionary, where each item is the crags name with the URL, Rocktype and empty route & image dictionary
         """   
         self.driver.get(guidebook_URL)
-        try:
-            crag_tables = self.driver.find_elements(By.CLASS_NAME,"col-sm-6") 
+        time.sleep(1)
+        crag_tables = self.driver.find_elements(By.XPATH, '//*[@class = "col-sm-6"]') 
+        if len(crag_tables) > 0:
             rows = []
             headers = []
             for table in crag_tables:
                 rows = rows + table.find_elements(By.TAG_NAME, "tr")
                 headers = headers + table.find_elements(By.CLASS_NAME, 'hdr1')
-
             crag_rows = [x for x in rows if x not in headers] #Remove headers from rows
-            crags = {}
             crag_routes = {}
             crag_images = {}
+            crags = {}
             for row in crag_rows:
                     a_tag = row.find_element(By.TAG_NAME, 'a')
                     crag_url = a_tag.get_attribute('href')
@@ -74,24 +90,24 @@ class scraper:
                     crag_name = a_tag.text
                     crag_rocktype = row.find_element(By.XPATH, './td[3]').text
                     crags[crag_uid] = [crag_name,crag_url,crag_rocktype,crag_routes,crag_images]
-        except:
+            return(crags)
+        else:   
             print("no crags for this guidebook")
-        time.sleep(1)
-        return(crags)
+            return("none")
 
     def get_routes(self,crag):
         """
-        scrapes the crag page for all the route and returns a dictionary of buttresses which contain a dictionary of every route at the buttress
+        scrapes the crag page for all the routes and returns a dictionary of buttresses which contain a dictionary of every route at the buttress
         """
         crag_URL = crag[1]
         self.driver.get(crag_URL)
         table = self.driver.find_element(By.ID, 'climb_table')
         table_body = table.find_element(By.TAG_NAME, 'tbody')
-        rows = table_body.find_elements(By.TAG_NAME, 'tr')
+        table_rows = table_body.find_elements(By.TAG_NAME, 'tr')
         buttress_list = table_body.find_elements(By.XPATH, './/tr[@class ="dtrg-group buttress_header dtrg-start dtrg-level-0"]')
         buttress_dict = {}
         route_details = []
-        for row in rows:
+        for row in table_rows:
             if row in buttress_list:
                 if len(route_details) != 0:
                     buttress_dict[buttress] = routes_dict
@@ -110,8 +126,7 @@ class scraper:
                 route_details.append(grade.find_element(By.TAG_NAME, "span").text)
                 stars= row.find_element(By.XPATH, './/td[@class = " datatable_column_star"]')
                 try:    
-                    route_details.append(stars.find_element(By.TAG_NAME, 'i').get_attribute('title'))
-                    
+                    route_details.append(stars.find_element(By.TAG_NAME, 'i').get_attribute('title'))      
                 except:
                     route_details.append("None")
                 routes_dict[route_uid] = route_details
@@ -120,6 +135,9 @@ class scraper:
         return(buttress_dict)
 
     def get_cragPics(self,crag):
+        """
+        scrapes the crag page for all the photos, gets there title and the high quality image source. returns a dictionary of images where each photo has a v4 UUID
+        """
         crag_URL = crag[1]
         self.driver.get(crag_URL)
         pics_tab = self.driver.find_element(By.ID, 'show_photos').get_attribute('href')
@@ -137,6 +155,9 @@ class scraper:
         return(images)
     
     def save_dictionary(self, dictionary, name):
+        """
+        Saves the input dictionary as a .json file with the inputt name
+        """
         with open(f"{name}.json", "w") as write_file:   
             json.dump(dictionary, write_file, indent=4)
 
@@ -146,12 +167,12 @@ if __name__ == "__main__":
     
     eng_climbs = scraper()
     eng_climbs.load_and_accept_cookies()
-    eng_climbs.get_guidebooks("England")
-    eng_climbs.crags = eng_climbs.get_crags(eng_climbs.guidebook_links[0])
+    eng_climbs.guidebooks = eng_climbs.get_guidebooks("England")
+    eng_climbs.crags = eng_climbs.get_crags(eng_climbs.guidebooks[0])
     first_crag = list(eng_climbs.crags.keys())[0]
     eng_climbs.crags[first_crag][3] = eng_climbs.get_routes(eng_climbs.crags[first_crag])
     eng_climbs.crags[first_crag][4] = eng_climbs.get_cragPics(eng_climbs.crags[first_crag])
-    
+
     eng_climbs.save_dictionary(eng_climbs.crags,"crags")
 
     
