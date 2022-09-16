@@ -8,4 +8,4 @@ Then a scraper was made to go through the ukc website and collect all of the gui
 
 A nested dictionary stores the crags,with the buttresses there climbs and the images of the crag. The dictionary is saved to a .json file.
 
-Test for the ukc scraper was made to verify the methods return the corect data types under correct and incrorrect inputs and cirumstances.
+Test file for the ukc scraper was made to verify the methods return the corect data types under correct and incrorrect inputs and cirumstances.

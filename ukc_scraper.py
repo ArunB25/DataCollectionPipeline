@@ -72,7 +72,9 @@ class scraper:
         """   
         self.driver.get(guidebook_URL)
         time.sleep(1)
-        crag_tables = self.driver.find_elements(By.XPATH, '//*[@class = "col-sm-6"]') 
+        mainbody = self.driver.find_element(By.XPATH, '//*[@class = "col-md-12"]')
+        guidebook_title = mainbody.find_element(By.TAG_NAME, 'h1').text
+        crag_tables = self.driver.find_elements(By.XPATH, '//*[@class = "col-sm-6"]')
         if len(crag_tables) > 0:
             rows = []
             headers = []
@@ -89,7 +91,7 @@ class scraper:
                     crag_uid = crag_url.split('=')[-1]
                     crag_name = a_tag.text
                     crag_rocktype = row.find_element(By.XPATH, './td[3]').text
-                    crags[crag_uid] = [crag_name,crag_url,crag_rocktype,crag_routes,crag_images]
+                    crags[crag_uid] = {"name":crag_name,"crag_URL":crag_url,"rocktype":crag_rocktype, "guidebook":guidebook_title,"guidebook_URL":guidebook_URL,"routes":crag_routes,"images":crag_images}
             return(crags)
         else:   
             print("no crags for this guidebook")
@@ -99,37 +101,35 @@ class scraper:
         """
         scrapes the crag page for all the routes and returns a dictionary of buttresses which contain a dictionary of every route at the buttress
         """
-        crag_URL = crag[1]
+        crag_URL = crag["crag_URL"]
         self.driver.get(crag_URL)
         table = self.driver.find_element(By.ID, 'climb_table')
         table_body = table.find_element(By.TAG_NAME, 'tbody')
         table_rows = table_body.find_elements(By.TAG_NAME, 'tr')
         buttress_list = table_body.find_elements(By.XPATH, './/tr[@class ="dtrg-group buttress_header dtrg-start dtrg-level-0"]')
         buttress_dict = {}
-        route_details = []
+        routes_dict = {}
         for row in table_rows:
             if row in buttress_list:
-                if len(route_details) != 0:
+                if len(routes_dict) != 0:
                     buttress_dict[buttress] = routes_dict
                 buttress = row.find_element(By.TAG_NAME, 'h5').text
                 routes_dict = {}
             elif row not in buttress_list:
-                route_details = []
                 a_tag = row.find_element(By.XPATH, './/*[@class = "small not-small-md main_link "]')
                 route_URL = a_tag.get_attribute('href')
                 route_uid = route_URL.split('-')[-1]
-                route_details.append(a_tag.text)
-                route_details.append(route_URL)
+                route_name = a_tag.text
                 climbing_type= row.find_element(By.XPATH, './/td[@class = " datatable_column_type"]')
-                route_details.append(climbing_type.find_element(By.TAG_NAME, 'i').get_attribute('title'))
+                route_type = (climbing_type.find_element(By.TAG_NAME, 'i').get_attribute('title'))
                 grade = row.find_element(By.XPATH, './/td[@class = " datatable_column_grade small not-small-md"]')
-                route_details.append(grade.find_element(By.TAG_NAME, "span").text)
+                route_grade = grade.find_element(By.TAG_NAME, "span").text
                 stars= row.find_element(By.XPATH, './/td[@class = " datatable_column_star"]')
                 try:    
-                    route_details.append(stars.find_element(By.TAG_NAME, 'i').get_attribute('title'))      
+                    route_stars = stars.find_element(By.TAG_NAME, 'i').get_attribute('title')    
                 except:
-                    route_details.append("None")
-                routes_dict[route_uid] = route_details
+                    route_stars = "None"
+                routes_dict[route_uid] = {"name":route_name,"URL":route_URL,"type":route_type,"grade":route_grade,"stars":route_stars}
             else:
                 print("what is this row????")
         return(buttress_dict)
@@ -138,7 +138,7 @@ class scraper:
         """
         scrapes the crag page for all the photos, gets there title and the high quality image source. returns a dictionary of images where each photo has a v4 UUID
         """
-        crag_URL = crag[1]
+        crag_URL = crag["crag_URL"]
         self.driver.get(crag_URL)
         pics_tab = self.driver.find_element(By.ID, 'show_photos').get_attribute('href')
         self.driver.get(pics_tab)
@@ -151,15 +151,15 @@ class scraper:
             img_thumbnail = photo.find_element(By.CLASS_NAME, 'img-fluid')
             title = (img_thumbnail.get_attribute('alt')).split('<',1)[0]
             img_uuid = str(uuid.uuid4())
-            images[img_uuid] = [title, photo_src]
+            images[img_uuid] = {"title":title, "source":photo_src}
         return(images)
     
     def save_dictionary(self, dictionary, name):
         """
-        Saves the input dictionary as a .json file with the inputt name
+        Saves the input dictionary as a .json file with the input name
         """
         with open(f"{name}.json", "w") as write_file:   
-            json.dump(dictionary, write_file, indent=4)
+            json.dump(dictionary, write_file, indent=6)
 
 
 
@@ -170,9 +170,9 @@ if __name__ == "__main__":
     eng_climbs.guidebooks = eng_climbs.get_guidebooks("England")
     eng_climbs.crags = eng_climbs.get_crags(eng_climbs.guidebooks[0])
     first_crag = list(eng_climbs.crags.keys())[0]
-    eng_climbs.crags[first_crag][3] = eng_climbs.get_routes(eng_climbs.crags[first_crag])
-    eng_climbs.crags[first_crag][4] = eng_climbs.get_cragPics(eng_climbs.crags[first_crag])
+    eng_climbs.crags[first_crag]["routes"] = eng_climbs.get_routes(eng_climbs.crags[first_crag])
+    eng_climbs.crags[first_crag]["images"] = eng_climbs.get_cragPics(eng_climbs.crags[first_crag])
 
-    eng_climbs.save_dictionary(eng_climbs.crags,"crags")
+    eng_climbs.save_dictionary(eng_climbs.crags,"first_crag")
 
     
