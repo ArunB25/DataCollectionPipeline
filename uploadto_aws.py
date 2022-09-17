@@ -43,8 +43,10 @@ class aws_client:
 
 if __name__ == "__main__":
     ukc_s3 = aws_client("ukc-data")
-    #ukc_s3.upload_json("first_crag.json", "fist_crag")
+
+    #testing methods 
+    ukc_s3.upload_json("first_crag.json", "fist_crag")
     ukc_s3.upload_src_image("https://imgcdn.ukc2.com/i/55419?fm=webp&time=1162047992&s=9a228b2987fa6763d784f2f123376baf","test_img")
-    #ukc_s3.print_allobjects()
+    ukc_s3.print_allobjects()
     ukc_s3.download_s3("test_img","testimg.png")
     

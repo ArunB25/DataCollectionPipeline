@@ -9,3 +9,5 @@ Then a scraper was made to go through the ukc website and collect all of the gui
 A nested dictionary stores the crags,with the buttresses there climbs and the images of the crag. The dictionary is saved to a .json file.
 
 Test file for the ukc scraper was made to verify the methods return the corect data types under correct and incrorrect inputs and cirumstances.
+
+An AWS file was created with methods to upload json files and images (using there source URL without downloading the image) to an s3 storage bucket. There are also other methods to get a list of all the objects in the storage and to download specifice objects 
