@@ -1,6 +1,17 @@
 import ukc_scraper
+import hypothesis
+import unittest
+
+
+class TestScraper(unittest.TestCase):
+    def test_get_guidebooks(self):
+        
+    
+
 
 if __name__ == "__main__":
+
+
     test = ukc_scraper.scraper()
     test.load_and_accept_cookies()
     test_failed = []

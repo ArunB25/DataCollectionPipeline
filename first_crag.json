@@ -1,305 +1,453 @@
 {
-      "1242": {
-            "name": "The Exmoor Coast Traverse",
-            "crag_URL": "https://www.ukclimbing.com/logbook/crag.php?id=1242",
+      "crag:0": {
+            "crag uid": "1242",
+            "crag name": "The Exmoor Coast Traverse",
+            "crag URL": "https://www.ukclimbing.com/logbook/crag.php?id=1242",
             "rocktype": "Sandstone (hard)",
             "guidebook": "A Climber's Guide to the Exmoor Coast Traverse",
-            "guidebook_URL": "https://www.ukclimbing.com/logbook/books/a_climbers_guide_to_the_exmoor_coast_traverse-2237",
-            "routes": {
-                  "Grexy combe": {
-                        "499429": {
-                              "name": "Grexy Combe",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/grexy_combe-499429",
-                              "type": "Scrambling",
-                              "grade": "Grade-1",
-                              "stars": "None"
-                        }
+            "guidebook URL": "https://www.ukclimbing.com/logbook/books/a_climbers_guide_to_the_exmoor_coast_traverse-2237",
+            "climbs": {
+                  "route:1": {
+                        "route uid": "499429",
+                        "name": "Grexy Combe",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/grexy_combe-499429",
+                        "type": "Scrambling",
+                        "grade": "Grade-1",
+                        "stars": "None",
+                        "buttress": "Grexy combe"
                   },
-                  "Henner's Hill": {
-                        "499427": {
-                              "name": "Henner's Hill",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/henners_hill-499427",
-                              "type": "Scrambling",
-                              "grade": "Grade-2",
-                              "stars": "None"
-                        },
-                        "499428": {
-                              "name": "Henner's Hill West",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/henners_hill_west-499428",
-                              "type": "Scrambling",
-                              "grade": "Grade-2",
-                              "stars": "None"
-                        }
+                  "route:2": {
+                        "route uid": "499427",
+                        "name": "Henner's Hill",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/henners_hill-499427",
+                        "type": "Scrambling",
+                        "grade": "Grade-2",
+                        "stars": "None",
+                        "buttress": "Henner's Hill"
                   },
-                  "Culbone": {
-                        "444698": {
-                              "name": "Culbone Combe Landslip",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/culbone_combe_landslip-444698",
-                              "type": "Winter",
-                              "grade": "I",
-                              "stars": "None"
-                        }
+                  "route:3": {
+                        "route uid": "499428",
+                        "name": "Henner's Hill West",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/henners_hill_west-499428",
+                        "type": "Scrambling",
+                        "grade": "Grade-2",
+                        "stars": "None",
+                        "buttress": "Henner's Hill"
                   },
-                  "Countisbury": {
-                        "472946": {
-                              "name": "Whitebeam Gully",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/whitebeam_gully-472946",
-                              "type": "Trad",
-                              "grade": "VS 4b",
-                              "stars": "None"
-                        },
-                        "499430": {
-                              "name": "Granny Knot",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/granny_knot-499430",
-                              "type": "Trad",
-                              "grade": "HVS 4c",
-                              "stars": "None"
-                        }
+                  "route:4": {
+                        "route uid": "444698",
+                        "name": "Culbone Combe Landslip",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/culbone_combe_landslip-444698",
+                        "type": "Winter",
+                        "grade": "I",
+                        "stars": "None",
+                        "buttress": "Culbone"
                   },
-                  "Foreland": {
-                        "499431": {
-                              "name": "Cracked Cannon Corner",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/cracked_cannon_corner-499431",
-                              "type": "Trad",
-                              "grade": "None",
-                              "stars": "None"
-                        },
-                        "499426": {
-                              "name": "Coddow Slip",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/coddow_slip-499426",
-                              "type": "Scrambling",
-                              "grade": "Grade-2",
-                              "stars": "None"
-                        },
-                        "348079": {
-                              "name": "Great Red Gully",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/great_red_gully-348079",
-                              "type": "Scrambling",
-                              "grade": "Grade-2",
-                              "stars": "None"
-                        }
+                  "route:5": {
+                        "route uid": "472946",
+                        "name": "Whitebeam Gully",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/whitebeam_gully-472946",
+                        "type": "Trad",
+                        "grade": "VS 4b",
+                        "stars": "None",
+                        "buttress": "Countisbury"
                   },
-                  "Wringapeak": {
-                        "499413": {
-                              "name": "The Way Back",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_way_back-499413",
-                              "type": "Trad",
-                              "grade": "HVS 4c",
-                              "stars": "None"
-                        },
-                        "499414": {
-                              "name": "Sanctuary",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/sanctuary-499414",
-                              "type": "Trad",
-                              "grade": "HS 4b",
-                              "stars": "None"
-                        },
-                        "499198": {
-                              "name": "Traverse of Great Bastion",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/traverse_of_great_bastion-499198",
-                              "type": "Trad",
-                              "grade": "VD",
-                              "stars": "1 Star"
-                        },
-                        "499406": {
-                              "name": "Archer",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/archer-499406",
-                              "type": "Trad",
-                              "grade": "E6 6b",
-                              "stars": "None"
-                        },
-                        "430280": {
-                              "name": "The Claw",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_claw-430280",
-                              "type": "Trad",
-                              "grade": "D",
-                              "stars": "None"
-                        },
-                        "499408": {
-                              "name": "Black Wall Direct",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/black_wall_direct-499408",
-                              "type": "Trad",
-                              "grade": "VS 5a",
-                              "stars": "None"
-                        },
-                        "499411": {
-                              "name": "Pharoah's Chimney",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/pharoahs_chimney-499411",
-                              "type": "Trad",
-                              "grade": "HVS 5a",
-                              "stars": "None"
-                        },
-                        "499412": {
-                              "name": "Kittiwake Slab",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/kittiwake_slab-499412",
-                              "type": "Trad",
-                              "grade": "S",
-                              "stars": "None"
-                        },
-                        "499415": {
-                              "name": "The Flying Buttress",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_flying_buttress-499415",
-                              "type": "Trad",
-                              "grade": "VD",
-                              "stars": "None"
-                        },
-                        "499416": {
-                              "name": "Kampala",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/kampala-499416",
-                              "type": "Trad",
-                              "grade": "HVS 4c",
-                              "stars": "None"
-                        },
-                        "499417": {
-                              "name": "Curate's Corner",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/curates_corner-499417",
-                              "type": "Trad",
-                              "grade": "HVS 4c",
-                              "stars": "None"
-                        }
+                  "route:6": {
+                        "route uid": "499430",
+                        "name": "Granny Knot",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/granny_knot-499430",
+                        "type": "Trad",
+                        "grade": "HVS 4c",
+                        "stars": "None",
+                        "buttress": "Countisbury"
                   },
-                  "Trentishoe": {
-                        "499425": {
-                              "name": "Tuesday Route",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/tuesday_route-499425",
-                              "type": "Scrambling",
-                              "grade": "Grade-2",
-                              "stars": "None"
-                        },
-                        "499424": {
-                              "name": "Coxcomb West",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/coxcomb_west-499424",
-                              "type": "Scrambling",
-                              "grade": "3S",
-                              "stars": "None"
-                        },
-                        "255093": {
-                              "name": "Bosley Gut",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/bosley_gut-255093",
-                              "type": "Scrambling",
-                              "grade": "Grade-1",
-                              "stars": "None"
-                        },
-                        "499418": {
-                              "name": "Razorbill Route",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/razorbill_route-499418",
-                              "type": "Trad",
-                              "grade": "None",
-                              "stars": "None"
-                        },
-                        "437099": {
-                              "name": "North Cleave Gut.",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/north_cleave_gut-437099",
-                              "type": "Scrambling",
-                              "grade": "Grade-2",
-                              "stars": "None"
-                        },
-                        "499419": {
-                              "name": "The D Tract",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_d_tract-499419",
-                              "type": "Trad",
-                              "grade": "E2 5b",
-                              "stars": "None"
-                        },
-                        "348058": {
-                              "name": "Neck Wood Gut",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/neck_wood_gut-348058",
-                              "type": "Scrambling",
-                              "grade": "Grade-3",
-                              "stars": "None"
-                        },
-                        "499423": {
-                              "name": "Hidden Gully",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/hidden_gully-499423",
-                              "type": "Scrambling",
-                              "grade": "Grade-2",
-                              "stars": "None"
-                        },
-                        "499422": {
-                              "name": "Notch Gully",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/notch_gully-499422",
-                              "type": "Trad",
-                              "grade": "VS 4a",
-                              "stars": "None"
-                        },
-                        "499421": {
-                              "name": "Great Hangman Gut",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/great_hangman_gut-499421",
-                              "type": "Scrambling",
-                              "grade": "Grade-3",
-                              "stars": "1 Star"
-                        },
-                        "499420": {
-                              "name": "Little Hangman Gut",
-                              "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/little_hangman_gut-499420",
-                              "type": "Scrambling",
-                              "grade": "Grade-3",
-                              "stars": "None"
-                        }
+                  "route:7": {
+                        "route uid": "499431",
+                        "name": "Cracked Cannon Corner",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/cracked_cannon_corner-499431",
+                        "type": "Trad",
+                        "grade": "None",
+                        "stars": "None",
+                        "buttress": "Foreland"
+                  },
+                  "route:8": {
+                        "route uid": "499426",
+                        "name": "Coddow Slip",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/coddow_slip-499426",
+                        "type": "Scrambling",
+                        "grade": "Grade-2",
+                        "stars": "None",
+                        "buttress": "Foreland"
+                  },
+                  "route:9": {
+                        "route uid": "348079",
+                        "name": "Great Red Gully",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/great_red_gully-348079",
+                        "type": "Scrambling",
+                        "grade": "Grade-2",
+                        "stars": "None",
+                        "buttress": "Foreland"
+                  },
+                  "route:10": {
+                        "route uid": "499413",
+                        "name": "The Way Back",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_way_back-499413",
+                        "type": "Trad",
+                        "grade": "HVS 4c",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:11": {
+                        "route uid": "499414",
+                        "name": "Sanctuary",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/sanctuary-499414",
+                        "type": "Trad",
+                        "grade": "HS 4b",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:12": {
+                        "route uid": "499198",
+                        "name": "Traverse of Great Bastion",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/traverse_of_great_bastion-499198",
+                        "type": "Trad",
+                        "grade": "VD",
+                        "stars": "1 Star",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:13": {
+                        "route uid": "499406",
+                        "name": "Archer",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/archer-499406",
+                        "type": "Trad",
+                        "grade": "E6 6b",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:14": {
+                        "route uid": "430280",
+                        "name": "The Claw",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_claw-430280",
+                        "type": "Trad",
+                        "grade": "D",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:15": {
+                        "route uid": "499408",
+                        "name": "Black Wall Direct",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/black_wall_direct-499408",
+                        "type": "Trad",
+                        "grade": "VS 5a",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:16": {
+                        "route uid": "499411",
+                        "name": "Pharoah's Chimney",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/pharoahs_chimney-499411",
+                        "type": "Trad",
+                        "grade": "HVS 5a",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:17": {
+                        "route uid": "499412",
+                        "name": "Kittiwake Slab",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/kittiwake_slab-499412",
+                        "type": "Trad",
+                        "grade": "S",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:18": {
+                        "route uid": "499415",
+                        "name": "The Flying Buttress",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_flying_buttress-499415",
+                        "type": "Trad",
+                        "grade": "VD",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:19": {
+                        "route uid": "499416",
+                        "name": "Kampala",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/kampala-499416",
+                        "type": "Trad",
+                        "grade": "HVS 4c",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:20": {
+                        "route uid": "499417",
+                        "name": "Curate's Corner",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/curates_corner-499417",
+                        "type": "Trad",
+                        "grade": "HVS 4c",
+                        "stars": "None",
+                        "buttress": "Wringapeak"
+                  },
+                  "route:21": {
+                        "route uid": "499425",
+                        "name": "Tuesday Route",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/tuesday_route-499425",
+                        "type": "Scrambling",
+                        "grade": "Grade-2",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:22": {
+                        "route uid": "499424",
+                        "name": "Coxcomb West",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/coxcomb_west-499424",
+                        "type": "Scrambling",
+                        "grade": "3S",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:23": {
+                        "route uid": "255093",
+                        "name": "Bosley Gut",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/bosley_gut-255093",
+                        "type": "Scrambling",
+                        "grade": "Grade-1",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:24": {
+                        "route uid": "499418",
+                        "name": "Razorbill Route",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/razorbill_route-499418",
+                        "type": "Trad",
+                        "grade": "None",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:25": {
+                        "route uid": "437099",
+                        "name": "North Cleave Gut.",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/north_cleave_gut-437099",
+                        "type": "Scrambling",
+                        "grade": "Grade-2",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:26": {
+                        "route uid": "499419",
+                        "name": "The D Tract",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_d_tract-499419",
+                        "type": "Trad",
+                        "grade": "E2 5b",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:27": {
+                        "route uid": "348058",
+                        "name": "Neck Wood Gut",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/neck_wood_gut-348058",
+                        "type": "Scrambling",
+                        "grade": "Grade-3",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:28": {
+                        "route uid": "499423",
+                        "name": "Hidden Gully",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/hidden_gully-499423",
+                        "type": "Scrambling",
+                        "grade": "Grade-2",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:29": {
+                        "route uid": "499422",
+                        "name": "Notch Gully",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/notch_gully-499422",
+                        "type": "Trad",
+                        "grade": "VS 4a",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:30": {
+                        "route uid": "499421",
+                        "name": "Great Hangman Gut",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/great_hangman_gut-499421",
+                        "type": "Scrambling",
+                        "grade": "Grade-3",
+                        "stars": "1 Star",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:31": {
+                        "route uid": "499420",
+                        "name": "Little Hangman Gut",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/little_hangman_gut-499420",
+                        "type": "Scrambling",
+                        "grade": "Grade-3",
+                        "stars": "None",
+                        "buttress": "Trentishoe"
+                  },
+                  "route:32": {
+                        "route uid": "436915",
+                        "name": "Exmoor Coast Traverse (full version)",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/exmoor_coast_traverse_full_version-436915",
+                        "type": "Trad",
+                        "grade": "VS",
+                        "stars": "3 Stars",
+                        "buttress": "The Traverses"
+                  },
+                  "route:33": {
+                        "route uid": "470402",
+                        "name": "Exmoor Coast Traverse (Guidebook Version)",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/exmoor_coast_traverse_guidebook_version-470402",
+                        "type": "Trad",
+                        "grade": "VS",
+                        "stars": "2 Stars",
+                        "buttress": "The Traverses"
+                  },
+                  "route:34": {
+                        "route uid": "470403",
+                        "name": "Hidden Edge of Exmoor",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/hidden_edge_of_exmoor-470403",
+                        "type": "Trad",
+                        "grade": "VS",
+                        "stars": "2 Stars",
+                        "buttress": "The Traverses"
+                  },
+                  "route:35": {
+                        "route uid": "470404",
+                        "name": "Archer's Traverse",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/archers_traverse-470404",
+                        "type": "Trad",
+                        "grade": "VS",
+                        "stars": "1 Star",
+                        "buttress": "The Traverses"
+                  },
+                  "route:36": {
+                        "route uid": "499233",
+                        "name": "Goi's Project",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/gois_project-499233",
+                        "type": "Sport",
+                        "grade": "Project",
+                        "stars": "None",
+                        "buttress": "The Traverses"
+                  },
+                  "route:37": {
+                        "route uid": "653805",
+                        "name": "Combe Martin to Little Hangman Gut",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/combe_martin_to_little_hangman_gut-653805",
+                        "type": "Trad",
+                        "grade": "VD",
+                        "stars": "1 Star",
+                        "buttress": "The Traverses"
+                  },
+                  "route:38": {
+                        "route uid": "653807",
+                        "name": "Valley of Rocks traverse",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/valley_of_rocks_traverse-653807",
+                        "type": "Trad",
+                        "grade": "HS 4b",
+                        "stars": "1 Star",
+                        "buttress": "The Traverses"
+                  },
+                  "route:39": {
+                        "route uid": "653808",
+                        "name": "Duty Point traverse",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/duty_point_traverse-653808",
+                        "type": "Trad",
+                        "grade": "HD",
+                        "stars": "1 Star",
+                        "buttress": "The Traverses"
+                  },
+                  "route:40": {
+                        "route uid": "653809",
+                        "name": "Crock Point traverse",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/crock_point_traverse-653809",
+                        "type": "Trad",
+                        "grade": "HS 4c",
+                        "stars": "1 Star",
+                        "buttress": "The Traverses"
+                  },
+                  "route:41": {
+                        "route uid": "653806",
+                        "name": "Heddon's mouth to Great Hangman Gut",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/heddons_mouth_to_great_hangman_gut-653806",
+                        "type": "Trad",
+                        "grade": "S",
+                        "stars": "1 Star",
+                        "buttress": "The Traverses"
+                  },
+                  "route:42": {
+                        "route uid": "668637",
+                        "name": "The Inner Sanctuary: Wringapeak to Hedddons mouth",
+                        "URL": "https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/the_inner_sanctuary_wringapeak_to_hedddons_mouth-668637",
+                        "type": "Trad",
+                        "grade": "VS 5a",
+                        "stars": "3 Stars",
+                        "buttress": "The Traverses"
                   }
             },
             "images": {
-                  "13b92c2b-820c-41f7-8bea-98618122b1ed": {
+                  "b40a83a3-3fc5-43df-b10c-b2146e3965ba": {
                         "title": "sunset at venue",
                         "source": "https://imgcdn.ukc2.com/i/55419?fm=webp&time=1162047992&s=9a228b2987fa6763d784f2f123376baf"
                   },
-                  "b57f8b77-ec9e-4aa3-afb3-86ea0f6a2d1f": {
+                  "7dbf5124-498b-4091-9405-f9f4cf4adbe8": {
                         "title": "Desperate measures",
                         "source": "https://imgcdn.ukc2.com/i/282456?fm=webp&time=1564066290&s=f79b1201f487c2c16a8a5fc21b23e077"
                   },
-                  "d6fea924-8117-4549-818c-c1c577aefc0f": {
+                  "65e3a5bb-5f81-4863-95de-ace202606002": {
                         "title": "Boulder hopping near East Inlet",
                         "source": "https://imgcdn.ukc2.com/i/386340?fm=webp&time=1650985549&s=d6911ae398fb4c88e5416cee0195e585"
                   },
-                  "ff91f5d2-8219-4c3e-8bc0-153413bfcc53": {
+                  "1357777a-1abc-4a89-b89b-63a1c4552270": {
                         "title": "Steve exiting the zawn.",
                         "source": "https://imgcdn.ukc2.com/i/386384?fm=webp&time=1651054080&s=21eaf2a5280748f0a56459c727dcecc5"
                   },
-                  "9cdf787e-ae05-4175-8799-a2e9c67adf96": {
+                  "01619b08-a367-4b60-b463-eab1e3cee405": {
                         "title": "The Claw.  Second Pitch.",
                         "source": "https://imgcdn.ukc2.com/i/282458?fm=webp&time=1590925086&s=78b082c551a1eaa27c101f5686a929c6"
                   },
-                  "8ccc2af7-305a-47e5-a4fd-813db6e7d48c": {
+                  "10881f2f-0bed-4af0-b304-3f5d7e1d831b": {
                         "title": "Jim making an exit from the Big Bluff cave towards Hollowbrook. 5 mins of throwing boulders to build a bridge.",
                         "source": "https://imgcdn.ukc2.com/i/386387?fm=webp&time=1651055557&s=93e289460329cf8c7f0038dcc80e40c5"
                   },
-                  "cc1ad7e8-fecf-47cc-8b59-913ce53e6a7d": {
+                  "504e147d-389d-4090-a219-e52b4ea58974": {
                         "title": "The wet and slippery first pitch of The Claw.",
                         "source": "https://imgcdn.ukc2.com/i/282455?fm=webp&time=1559218715&s=7f009c9dc1fc75ce21639daab063e21f"
                   },
-                  "65d74714-ef08-4c5b-9e1d-bd4619fd4656": {
+                  "37716528-eeda-412c-b8d0-a51dd225db60": {
                         "title": "Jim taking the lower traverse line on the Valley of the Rocks section of the Exmoor coast traverse.",
                         "source": "https://imgcdn.ukc2.com/i/386724?fm=webp&time=1651488049&s=d5c9eeebc3bd02b8fb1489af1ada3c6b"
                   },
-                  "e3a8e58d-1fce-45cd-baab-bb78b302b1e8": {
+                  "9545f37d-62ee-4dff-a26f-3f5dd07d3104": {
                         "title": "Abseiling at the end of the Valley of the Rocks section. Slippery when wet, easily downclimbable when dry.",
                         "source": "https://imgcdn.ukc2.com/i/386385?fm=webp&time=1651055123&s=0b8d8040e93393d591dea6a282cfcdaf"
                   },
-                  "2ddca5ee-d952-4f7e-9fac-71a7aeecfcf4": {
+                  "0541dd31-6d11-4f31-b275-6b6c71e46d0f": {
                         "title": "Night climbing the high tide traverse line of Crock Point.",
                         "source": "https://imgcdn.ukc2.com/i/386386?fm=webp&time=1651055336&s=74218b1aba8ee6d74bc04bf5fd15cd9b"
                   },
-                  "eda614f9-69c9-49a7-9170-fd1122c4dded": {
+                  "9e83abcb-683c-41f1-a125-5e4db83bbd83": {
                         "title": "Great Hangman Gut",
                         "source": "https://imgcdn.ukc2.com/i/385324?fm=webp&time=1649410956&s=a64c5746a92fb2ac28ff1a2c7d6d62f0"
                   },
-                  "b5de68b8-dc40-4169-8752-cd105c13ac9c": {
+                  "17b9026f-3f75-429f-9e42-40cc39cda552": {
                         "title": "Approaches to the Wringapeak",
                         "source": "https://imgcdn.ukc2.com/i/307346?fm=webp&time=1559477542&s=5669f11abaa6f188ae81f1417f5df265"
                   },
-                  "6dbf40e0-b694-44a8-8e25-97c1fe62e706": {
+                  "fd7dd4ee-fff0-4667-a680-3a4df6552a4a": {
                         "title": "Crock Point (2hrs before low tide)",
                         "source": "https://imgcdn.ukc2.com/i/307343?fm=webp&time=1559477566&s=f3c3998754063be60e61ab27ed3da462"
                   },
-                  "ac4e072f-645c-47ab-af49-345c86f2e80c": {
+                  "390a7416-4495-4ef6-9293-bcb411547581": {
                         "title": "North Cleave Gut.",
                         "source": "https://imgcdn.ukc2.com/i/285369?fm=webp&time=1565961134&s=00158af5dcaf164592025a1d3337580c"
                   },
-                  "2e0bb425-50fe-4e49-951f-d1b0d44a45ee": {
+                  "443a9859-9a13-44b9-9337-3d0f2bc973a6": {
                         "title": "Two tent pegs and a Screamer.  Bomber!",
                         "source": "https://imgcdn.ukc2.com/i/282457?fm=webp&time=1474388278&s=c1c26fb61c571a51ae6d036b66b5fc8d"
                   },
-                  "9d62ff28-3f62-4d84-9064-968dd39d5ad6": {
+                  "50c4ef87-932b-4bbe-8728-3575c1a5889a": {
                         "title": "The Top of Great Red Gully.",
                         "source": "https://imgcdn.ukc2.com/i/147533?fm=webp&time=1587543586&s=ec153c9bb2ab86a0091073c96089cccc"
                   }
