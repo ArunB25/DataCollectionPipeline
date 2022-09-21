@@ -17,13 +17,17 @@ class scraper:
         '''
         Opens on a chrome web drive UKC and accept the cookies.
         '''
-        self.driver = webdriver.Chrome() 
-        URL = "https://www.ukclimbing.com/logbook/books/"
-        self.driver.get(URL)
-        time.sleep(1) 
-        accept_cookies_button = self.driver.find_element(By.XPATH, '//*[@class = "btn btn-primary"]')
-        accept_cookies_button.click()
-        time.sleep(1)
+        try:
+            self.driver = webdriver.Chrome() 
+            URL = "https://www.ukclimbing.com/logbook/books/"
+            self.driver.get(URL)
+            time.sleep(1) 
+            accept_cookies_button = self.driver.find_element(By.XPATH, '//*[@class = "btn btn-primary"]')
+            accept_cookies_button.click()
+            time.sleep(1)
+            return("Cookies Accepted")
+        except:
+            return("Error Accepting Cookies")
 
     def get_guidebooks(self,input_country):
         """
@@ -31,15 +35,15 @@ class scraper:
         """    
         country_element = self.does_guidebook_country_exist(input_country)
         if country_element == "country not found":
-            print("country not found")
             return("country not found")
+        elif country_element == "invalid input":
+            return("invalid input")
         else:
             print(country_element.find_element(By.TAG_NAME, 'a').text)
             guidebook_card = country_element.find_element(By.XPATH, './/div[@class = "card-body"]')
             all_guidebooks = guidebook_card.find_elements(By.TAG_NAME, 'li')    #get list of all guide books in specified country
             OutofPrint_list = guidebook_card.find_elements(By.XPATH, './/li[@title = "Out of print"]')  #get list of all out of print guide books in specified country
             guidebooks_inprint = [x for x in all_guidebooks if x not in OutofPrint_list] #remove guide books that are no longer being printed
-
             guidebook_links = []
             for guide in guidebooks_inprint: #gets links for all guidebooks
                 a_tag = guide.find_element(by=By.TAG_NAME, value='a')
@@ -58,13 +62,12 @@ class scraper:
             for country in country_list: #search through all countrys cards
                 a_tag = country.find_element(By.TAG_NAME, 'a')
                 a_text = (a_tag.text).split(' ',1)[0]
-                if input_country.lower() in a_text.lower():  #if country matches inputed country break
+                if input_country.lower() == a_text.lower():  #if country matches inputed country break
                     print(a_text)
                     return(country)              
             return("country not found")
         else:
-            print("input not valid")
-            return("country not found")
+            return("invalid input")
 
     def get_crags(self,guidebook_URL):
         """
@@ -93,7 +96,7 @@ class scraper:
             return(crags)
         else:   
             print("no crags for this guidebook")
-            return("none")
+            return({})
 
     def get_routes(self,crag):
         """
