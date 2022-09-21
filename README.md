@@ -10,4 +10,4 @@ A nested dictionary stores the crags,with the buttresses there climbs and the im
 
 Test file for the ukc scraper was made to verify the methods return the corect data types under correct and incrorrect inputs and cirumstances.
 
-An AWS file was created with methods to upload json files and images (using there source URL without downloading the image) to an s3 storage bucket. There are also other methods to get a list of all the objects in the storage and to download specifice objects 
+uploadto_aws file was created with methods to upload json files and images (using there source URL without downloading the image) to an s3 storage bucket, using the boto3 library. There are also other methods to get a list of all the objects in the storage and to download specifice objects. Additional methods using pandas made to take the raw dictionary from the scraper and transform it into a routes dataframe, which can be uploaded to an AWS RDS using sqlalchemy.
