@@ -10,6 +10,7 @@ import time
 from tabulate import tabulate
 import uuid
 import json
+import uploadto_aws
 
 class scraper:
     
@@ -92,17 +93,17 @@ class scraper:
                     crag_uid = crag_url.split('=')[-1]
                     crag_name = a_tag.text
                     crag_rocktype = row.find_element(By.XPATH, './td[3]').text
-                    crags[(f"crag:{idx}")] = {"crag uid":crag_uid,"crag name":crag_name,"crag URL":crag_url,"rocktype":crag_rocktype, "guidebook":guidebook_title,"guidebook URL":guidebook_URL}
+                    crags[(f"crag:{idx}")] = {"crag_uid":crag_uid,"crag_name":crag_name,"crag_URL":crag_url,"rocktype":crag_rocktype, "guidebook":guidebook_title,"guidebook_URL":guidebook_URL}
             return(crags)
         else:   
-            print("no crags for this guidebook")
+            print(f"no crags in guidebook: {guidebook_title}")
             return({})
 
-    def get_routes(self,crag):
+    def get_routes(self,crag,database_engine):
         """
         scrapes the crag page for all the routes and returns a dictionary of buttresses which contain a dictionary of every route at the buttress
         """
-        crag_URL = crag["crag URL"]
+        crag_URL = crag["crag_URL"]
         self.driver.get(crag_URL)
         table = self.driver.find_element(By.ID, 'climb_table')
         table_body = table.find_element(By.TAG_NAME, 'tbody')
@@ -118,27 +119,31 @@ class scraper:
                 a_tag = row.find_element(By.XPATH, './/*[@class = "small not-small-md main_link "]')
                 route_URL = a_tag.get_attribute('href')
                 route_uid = route_URL.split('-')[-1]
-                route_name = a_tag.text
-                climbing_type= row.find_element(By.XPATH, './/td[@class = " datatable_column_type"]')
-                route_type = (climbing_type.find_element(By.TAG_NAME, 'i').get_attribute('title'))
-                grade = row.find_element(By.XPATH, './/td[@class = " datatable_column_grade small not-small-md"]')
-                route_grade = grade.find_element(By.TAG_NAME, "span").text
-                stars= row.find_element(By.XPATH, './/td[@class = " datatable_column_star"]')
-                try:    
-                    route_stars = stars.find_element(By.TAG_NAME, 'i').get_attribute('title')    
-                except:
-                    route_stars = "None"
-                num_route += 1
-                routes_dict[f"route:{num_route}"] = {"route uid":route_uid,"name":route_name,"URL":route_URL,"type":route_type,"grade":route_grade,"stars":route_stars,"buttress":buttress}
+                if database_engine.isin_database(route_uid,"route_uid") == False:
+                    route_name = a_tag.text
+                    climbing_type= row.find_element(By.XPATH, './/td[@class = " datatable_column_type"]')
+                    route_type = (climbing_type.find_element(By.TAG_NAME, 'i').get_attribute('title'))
+                    grade = row.find_element(By.XPATH, './/td[@class = " datatable_column_grade small not-small-md"]')
+                    route_grade = grade.find_element(By.TAG_NAME, "span").text
+                    stars= row.find_element(By.XPATH, './/td[@class = " datatable_column_star"]')
+                    try:    
+                        route_stars = stars.find_element(By.TAG_NAME, 'i').get_attribute('title')    
+                    except:
+                        route_stars = "None"
+                    num_route += 1
+                    routes_dict[f"route:{num_route}"] = {"route_uid":route_uid,"name":route_name,"URL":route_URL,"type":route_type,"grade":route_grade,"stars":route_stars,"buttress":buttress}
+                else:
+                    print(f"Route with uid:{route_uid}, Already in database")
             else:
                 print("what is this row????")
         return(routes_dict)
 
-    def get_cragPics(self,crag):
+    def get_cragPics(self,crag,image_storage):
         """
         scrapes the crag page for all the photos, gets there title and the high quality image source. returns a dictionary of images where each photo has a v4 UUID
         """
-        crag_URL = crag["crag URL"]
+        crag_URL = crag["crag_URL"]
+        crag_uid = crag["crag_uid"]
         self.driver.get(crag_URL)
         pics_tab = self.driver.find_element(By.ID, 'show_photos').get_attribute('href')
         self.driver.get(pics_tab)
@@ -147,11 +152,15 @@ class scraper:
         photos_list = self.driver.find_elements(By.XPATH, '//a[@class = "photoswipe"]')
         images = {}
         for photo in photos_list:
-            photo_src = photo.get_attribute('data-image')
             img_thumbnail = photo.find_element(By.CLASS_NAME, 'img-fluid')
             title = (img_thumbnail.get_attribute('alt')).split('<',1)[0]
-            img_uuid = str(uuid.uuid4())
-            images[img_uuid] = {"title":title, "source":photo_src}
+            object_name = "{}:Crag#{}".format(title,crag_uid).replace(" ","_")
+            if image_storage.isin_s3(object_name) != "object does exist":
+                photo_src = photo.get_attribute('data-image')
+                img_uuid = str(uuid.uuid4())
+                images[img_uuid] = {"title":title, "source":photo_src,"s3_object_name":object_name}
+            else:
+                print(f"image {title} already exists in s3")
         return(images)
     
     def save_dictionary(self, dictionary, name):
@@ -168,11 +177,30 @@ if __name__ == "__main__":
     eng_climbs = scraper()
     eng_climbs.load_and_accept_cookies()
     eng_climbs.guidebooks = eng_climbs.get_guidebooks("England")
-    eng_climbs.crags = eng_climbs.get_crags(eng_climbs.guidebooks[0])
-    first_crag = list(eng_climbs.crags.keys())[0]
-    eng_climbs.crags[first_crag]["climbs"] = eng_climbs.get_routes(eng_climbs.crags[first_crag])
-    eng_climbs.crags[first_crag]["images"] = eng_climbs.get_cragPics(eng_climbs.crags[first_crag])
+    ukc_database = uploadto_aws.aws_client("ukc-data")
+    for index in range(0,2):
+        crags_dict = eng_climbs.get_crags(eng_climbs.guidebooks[index])
+        crag_list = list(crags_dict.keys())
+        for crag in crag_list:
+            print(crags_dict[crag]["crag_name"])
+            climbs_dict = eng_climbs.get_routes(crags_dict[crag],ukc_database)
+            if len(climbs_dict) > 0:
+                crags_dict[crag]["climbs"] = climbs_dict
+                ukc_database.create_dataframe(crags_dict[crag],upload=True)
+            else:
+                print("no climbs from crag, may already be in database")
+            image_dict = eng_climbs.get_cragPics(crags_dict[crag],ukc_database)
+            if len(image_dict) > 0:
+                crags_dict[crag]["images"] = image_dict
+                image_list = list(image_dict.keys())
+                crag_uid = crags_dict[crag]["crag_uid"]
+                for image in image_list:
+                    ukc_database.upload_src_image(image_dict[image]["source"],image_dict[image]["object_name"])
+            else:
+                print("all images from crag already in s3")
 
-    eng_climbs.save_dictionary(eng_climbs.crags,"first_crag")
+
+
+    
 
     

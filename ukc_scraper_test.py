@@ -32,6 +32,11 @@ class TestScraper(unittest.TestCase):
         expected_value = {}
         self.assertEqual(expected_value,actual_value)
 
+    def test_get_crags(self):
+        actual_value = self.test_scraper.get_crags("https://www.ukclimbing.com/logbook/books/baggy_climbing_guide-62")
+        expected_value = {}
+        self.assertEqual(expected_value,actual_value)
+
 
 if __name__ == "__main__":
 
