@@ -11,15 +11,23 @@ from tabulate import tabulate
 import uuid
 import json
 import uploadto_aws
-
+from selenium.webdriver.chrome.options import Options
 class scraper:
     
-    def load_and_accept_cookies(self) -> webdriver.Chrome:
+    def load_and_accept_cookies(self,headless) -> webdriver.Chrome:
         '''
+        headless = True or False
         Opens on a chrome web drive UKC and accept the cookies.
         '''
+        if headless == True:
+            chromeOptions = Options()
+            chromeOptions.headless = True
+        else:
+            chromeOptions = Options()
+            chromeOptions.headless = False
+
         try:
-            self.driver = webdriver.Chrome() 
+            self.driver = webdriver.Chrome(chrome_options=chromeOptions) 
             URL = "https://www.ukclimbing.com/logbook/books/"
             self.driver.get(URL)
             time.sleep(1) 
@@ -34,7 +42,7 @@ class scraper:
         """
         scrapes the current page for all the guidebooks of the specified country and returns a list of there URLs
         """    
-        country_element = self.does_guidebook_country_exist(input_country)
+        country_element = self.__does_guidebook_country_exist(input_country)
         if country_element == "country not found":
             return("country not found")
         elif country_element == "invalid input":
@@ -54,7 +62,7 @@ class scraper:
             return(guidebook_links)
             
 
-    def does_guidebook_country_exist(self,input_country):  
+    def __does_guidebook_country_exist(self,input_country):  
         """
         searches for the input country through the list of countries with guidebooks
         """
@@ -99,7 +107,7 @@ class scraper:
             print(f"no crags in guidebook: {guidebook_title}")
             return({})
 
-    def get_routes(self,crag,database_engine):
+    def get_routes(self,crag,database_engine,check_db):
         """
         scrapes the crag page for all the routes and returns a dictionary of buttresses which contain a dictionary of every route at the buttress
         """
@@ -109,7 +117,6 @@ class scraper:
         table_body = table.find_element(By.TAG_NAME, 'tbody')
         table_rows = table_body.find_elements(By.TAG_NAME, 'tr')
         buttress_list = table_body.find_elements(By.XPATH, './/tr[@class ="dtrg-group buttress_header dtrg-start dtrg-level-0"]')
-        buttress_dict = {}
         routes_dict = {}
         num_route = 0
         for row in table_rows:
@@ -119,7 +126,7 @@ class scraper:
                 a_tag = row.find_element(By.XPATH, './/*[@class = "small not-small-md main_link "]')
                 route_URL = a_tag.get_attribute('href')
                 route_uid = route_URL.split('-')[-1]
-                if database_engine.isin_database(route_uid,"route_uid") == False:
+                if database_engine.isin_database(route_uid,"route_uid") == False or check_db == False:
                     route_name = a_tag.text
                     climbing_type= row.find_element(By.XPATH, './/td[@class = " datatable_column_type"]')
                     route_type = (climbing_type.find_element(By.TAG_NAME, 'i').get_attribute('title'))
@@ -138,7 +145,7 @@ class scraper:
                 print("what is this row????")
         return(routes_dict)
 
-    def get_cragPics(self,crag,image_storage):
+    def get_cragPics(self,crag,image_storage,check_db):
         """
         scrapes the crag page for all the photos, gets there title and the high quality image source. returns a dictionary of images where each photo has a v4 UUID
         """
@@ -155,7 +162,7 @@ class scraper:
             img_thumbnail = photo.find_element(By.CLASS_NAME, 'img-fluid')
             title = (img_thumbnail.get_attribute('alt')).split('<',1)[0]
             object_name = "{}:Crag#{}".format(title,crag_uid).replace(" ","_")
-            if image_storage.isin_s3(object_name) != "object does exist":
+            if image_storage.isin_s3(object_name) != "object does exist" or check_db == False:
                 photo_src = photo.get_attribute('data-image')
                 img_uuid = str(uuid.uuid4())
                 images[img_uuid] = {"title":title, "source":photo_src,"s3_object_name":object_name}
@@ -175,27 +182,28 @@ class scraper:
 if __name__ == "__main__":
     
     eng_climbs = scraper()
-    eng_climbs.load_and_accept_cookies()
+    eng_climbs.load_and_accept_cookies(headless = True)
     eng_climbs.guidebooks = eng_climbs.get_guidebooks("England")
     ukc_database = uploadto_aws.aws_client("ukc-data")
-    for index in range(0,2):
+    UploadToDB = True
+    for index in range(0,1):
         crags_dict = eng_climbs.get_crags(eng_climbs.guidebooks[index])
         crag_list = list(crags_dict.keys())
         for crag in crag_list:
             print(crags_dict[crag]["crag_name"])
-            climbs_dict = eng_climbs.get_routes(crags_dict[crag],ukc_database)
-            if len(climbs_dict) > 0:
-                crags_dict[crag]["climbs"] = climbs_dict
+            climbs_dict = eng_climbs.get_routes(crags_dict[crag],ukc_database,UploadToDB)
+            crags_dict[crag]["climbs"] = climbs_dict
+            if len(climbs_dict) > 0 and UploadToDB == True:
                 ukc_database.create_dataframe(crags_dict[crag],upload=True)
             else:
-                print("no climbs from crag, may already be in database")
-            image_dict = eng_climbs.get_cragPics(crags_dict[crag],ukc_database)
-            if len(image_dict) > 0:
-                crags_dict[crag]["images"] = image_dict
+                print("Upload turned off or no climbs from crag, may already be in database")
+            image_dict = eng_climbs.get_cragPics(crags_dict[crag],ukc_database,UploadToDB)
+            crags_dict[crag]["images"] = image_dict
+            if len(image_dict) > 0 and UploadToDB == True:
                 image_list = list(image_dict.keys())
                 crag_uid = crags_dict[crag]["crag_uid"]
                 for image in image_list:
-                    ukc_database.upload_src_image(image_dict[image]["source"],image_dict[image]["object_name"])
+                    ukc_database.upload_src_image(image_dict[image]["source"],image_dict[image]["s3_object_name"])
             else:
                 print("all images from crag already in s3")
 

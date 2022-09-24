@@ -1,18 +1,21 @@
-from doctest import Example
+#from doctest import Example
 from ukc_scraper import scraper
-from hypothesis import example, given, strategies as st
+import uploadto_aws
 import unittest
+import json
 
 
 class TestScraper(unittest.TestCase):
     def test_accept_cookies(self):
-        actual_value = self.test_scraper.load_and_accept_cookies()
+        actual_value = self.test_scraper.load_and_accept_cookies(headless = False)
         expected_value = "Cookies Accepted"
         self.assertEqual(expected_value,actual_value)
+        
 
     def setUp(self):
         self.test_scraper = scraper()
-        self.test_scraper.load_and_accept_cookies()
+        self.test_scraper.load_and_accept_cookies(headless = False)
+        self.ukc_database = uploadto_aws.aws_client("ukc-data")
     
     def test_get_guidebooks(self):
         expected_value = "invalid input"
@@ -32,10 +35,16 @@ class TestScraper(unittest.TestCase):
         expected_value = {}
         self.assertEqual(expected_value,actual_value)
 
-    def test_get_crags(self):
-        actual_value = self.test_scraper.get_crags("https://www.ukclimbing.com/logbook/books/baggy_climbing_guide-62")
-        expected_value = {}
+        actual_value = list(self.test_scraper.get_crags("https://www.ukclimbing.com/logbook/books/a_climbers_guide_to_the_exmoor_coast_traverse-2237")["crag:0"])
+        expected_value = ["crag_uid","crag_name","crag_URL","rocktype","guidebook","guidebook_URL"]
         self.assertEqual(expected_value,actual_value)
+
+    def test_get_routes(self):
+        first_crag = {"crag_URL":"https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/"}
+        actual_value = self.test_scraper.get_routes(first_crag,self.ukc_database, check_db= False)
+        expected_value = json.load(open("first_crag.json"))["crag:0"]["climbs"]
+        self.assertEqual(expected_value,actual_value)
+
 
 
 if __name__ == "__main__":
@@ -45,15 +54,6 @@ if __name__ == "__main__":
 
 
     
-    # if type(test.get_crags("https://www.ukclimbing.com/logbook/books/baggy_climbing_guide-62")) == list: #test 4 to see if no crags exist in guide book (input is guidebook with no crags)
-    #     test_failed.append(True)
-    #     print("test 4 failed")
-    # crag = test.get_crags(guidebooks[0])
-    # if type(crag) != dict: #test 5 to see if correct output is recieved
-    #     if type(crag[0]) != list:
-    #         test_failed.append(True)
-    #         print("test 5 failed")
-    # first_crag = list(crag.keys())[0]
     # if type(test.get_routes(crag[first_crag])) != dict: #test 6 to see if correct output is recieved
     #     test_failed.append(True)
     #     print("test 6 failed")

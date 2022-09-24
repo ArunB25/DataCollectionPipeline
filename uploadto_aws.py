@@ -71,14 +71,14 @@ class aws_client:
             routes_df = pd.concat([climbs_df.reset_index(drop= True),crag_df.reset_index(drop= True)],axis=1)
             
             if upload == True:
-                self.uploadto_RDS(routes_df)
+                self.__uploadto_RDS(routes_df)
             else:
                 return(routes_df)
         else: 
             return("no climbs in data, rotes may already be in database")
 
-    
-    def uploadto_RDS(self,routes_df):
+
+    def __uploadto_RDS(self,routes_df):
         """
         uploads the routes dataframe to the AWS RDS using SQLalchemy
         """
@@ -86,7 +86,7 @@ class aws_client:
             
             conn = self.engine.connect()
             routes_df.to_sql('routes_dataset', conn, if_exists='append',index=False)
-            print("Dataframe Uplaoded")
+            print("Dataframe Uploded")
         except:
             print("Data Frame Upload FAILED")
 
@@ -105,7 +105,6 @@ if __name__ == "__main__":
     ukc_s3 = aws_client("ukc-data")
 
     #testing methods 
-    # ukc_s3.upload_json("first_crag.json", "fist_crag")
     # ukc_s3.upload_src_image("https://imgcdn.ukc2.com/i/55419?fm=webp&time=1162047992&s=9a228b2987fa6763d784f2f123376baf","test_img")
     # ukc_s3.print_allobjects()
     # ukc_s3.download_s3("test_img","testimg.png")
