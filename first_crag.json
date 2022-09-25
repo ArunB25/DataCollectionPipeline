@@ -387,82 +387,82 @@
                   }
             },
             "images": {
-                  "290634f9-b99f-4e92-ad52-81543fcc4b74": {
+                  "image:0": {
                         "title": "sunset at venue",
                         "source": "https://imgcdn.ukc2.com/i/55419?fm=webp&time=1162047992&s=9a228b2987fa6763d784f2f123376baf",
                         "s3_object_name": "sunset_at_venue:Crag#1242"
                   },
-                  "43c9da5c-b855-4a5d-8e1c-75a0984bb455": {
+                  "image:1": {
                         "title": "Desperate measures",
                         "source": "https://imgcdn.ukc2.com/i/282456?fm=webp&time=1564066290&s=f79b1201f487c2c16a8a5fc21b23e077",
                         "s3_object_name": "Desperate_measures:Crag#1242"
                   },
-                  "37bc77ee-dc30-43df-bdff-53274bfa048b": {
+                  "image:2": {
                         "title": "Boulder hopping near East Inlet",
                         "source": "https://imgcdn.ukc2.com/i/386340?fm=webp&time=1650985549&s=d6911ae398fb4c88e5416cee0195e585",
                         "s3_object_name": "Boulder_hopping_near_East_Inlet:Crag#1242"
                   },
-                  "8dc640c6-4440-4ab0-93e2-f5ef32ce9e39": {
+                  "image:3": {
                         "title": "Steve exiting the zawn.",
                         "source": "https://imgcdn.ukc2.com/i/386384?fm=webp&time=1651054080&s=21eaf2a5280748f0a56459c727dcecc5",
                         "s3_object_name": "Steve_exiting_the_zawn.:Crag#1242"
                   },
-                  "09c43553-5b0f-42db-a5ff-9cb2c4ff70e1": {
+                  "image:4": {
                         "title": "The Claw.  Second Pitch.",
                         "source": "https://imgcdn.ukc2.com/i/282458?fm=webp&time=1590925086&s=78b082c551a1eaa27c101f5686a929c6",
                         "s3_object_name": "The_Claw.__Second_Pitch.:Crag#1242"
                   },
-                  "7ccd12d4-1abd-4aa0-90ca-59665e64c03d": {
+                  "image:5": {
                         "title": "Jim making an exit from the Big Bluff cave towards Hollowbrook. 5 mins of throwing boulders to build a bridge.",
                         "source": "https://imgcdn.ukc2.com/i/386387?fm=webp&time=1651055557&s=93e289460329cf8c7f0038dcc80e40c5",
                         "s3_object_name": "Jim_making_an_exit_from_the_Big_Bluff_cave_towards_Hollowbrook._5_mins_of_throwing_boulders_to_build_a_bridge.:Crag#1242"
                   },
-                  "f859c06d-3480-4bfa-a9f9-f0ec9c0d5a98": {
+                  "image:6": {
                         "title": "The wet and slippery first pitch of The Claw.",
                         "source": "https://imgcdn.ukc2.com/i/282455?fm=webp&time=1559218715&s=7f009c9dc1fc75ce21639daab063e21f",
                         "s3_object_name": "The_wet_and_slippery_first_pitch_of_The_Claw.:Crag#1242"
                   },
-                  "7fdbb9f5-d9c0-45b2-a0b1-e310f67ddc94": {
+                  "image:7": {
                         "title": "Jim taking the lower traverse line on the Valley of the Rocks section of the Exmoor coast traverse.",
                         "source": "https://imgcdn.ukc2.com/i/386724?fm=webp&time=1651488049&s=d5c9eeebc3bd02b8fb1489af1ada3c6b",
                         "s3_object_name": "Jim_taking_the_lower_traverse_line_on_the_Valley_of_the_Rocks_section_of_the_Exmoor_coast_traverse.:Crag#1242"
                   },
-                  "880f98df-6f48-45b5-b3da-8577472f3af5": {
+                  "image:8": {
                         "title": "Abseiling at the end of the Valley of the Rocks section. Slippery when wet, easily downclimbable when dry.",
                         "source": "https://imgcdn.ukc2.com/i/386385?fm=webp&time=1651055123&s=0b8d8040e93393d591dea6a282cfcdaf",
                         "s3_object_name": "Abseiling_at_the_end_of_the_Valley_of_the_Rocks_section._Slippery_when_wet,_easily_downclimbable_when_dry.:Crag#1242"
                   },
-                  "dce2b62a-06b9-4195-bd22-837bd82fbcb2": {
+                  "image:9": {
                         "title": "Night climbing the high tide traverse line of Crock Point.",
                         "source": "https://imgcdn.ukc2.com/i/386386?fm=webp&time=1651055336&s=74218b1aba8ee6d74bc04bf5fd15cd9b",
                         "s3_object_name": "Night_climbing_the_high_tide_traverse_line_of_Crock_Point.:Crag#1242"
                   },
-                  "86414e54-5112-41b0-960f-5a09bce3ffcf": {
+                  "image:10": {
                         "title": "Great Hangman Gut",
                         "source": "https://imgcdn.ukc2.com/i/385324?fm=webp&time=1649410956&s=a64c5746a92fb2ac28ff1a2c7d6d62f0",
                         "s3_object_name": "Great_Hangman_Gut:Crag#1242"
                   },
-                  "95e01c7a-43cf-41f7-a598-7b8aa189cd4c": {
+                  "image:11": {
                         "title": "Approaches to the Wringapeak",
                         "source": "https://imgcdn.ukc2.com/i/307346?fm=webp&time=1559477542&s=5669f11abaa6f188ae81f1417f5df265",
                         "s3_object_name": "Approaches_to_the_Wringapeak:Crag#1242"
                   },
-                  "2cb192a5-fe79-407a-aa29-0092ecbf0186": {
+                  "image:12": {
                         "title": "Crock Point (2hrs before low tide)",
                         "source": "https://imgcdn.ukc2.com/i/307343?fm=webp&time=1559477566&s=f3c3998754063be60e61ab27ed3da462",
                         "s3_object_name": "Crock_Point_(2hrs_before_low_tide):Crag#1242"
                   },
-                  "0c6729d0-42c1-408f-ad70-7a72868cb44b": {
+                  "image:13": {
                         "title": "North Cleave Gut.",
                         "source": "https://imgcdn.ukc2.com/i/285369?fm=webp&time=1565961134&s=00158af5dcaf164592025a1d3337580c",
                         "s3_object_name": "North_Cleave_Gut.:Crag#1242"
                   },
-                  "8c8ec521-752c-4792-a976-215a5ad9bdfa": {
+                  "image:14": {
                         "title": "Two tent pegs and a Screamer.  Bomber!",
                         "source": "https://imgcdn.ukc2.com/i/282457?fm=webp&time=1474388278&s=c1c26fb61c571a51ae6d036b66b5fc8d",
                         "s3_object_name": "Two_tent_pegs_and_a_Screamer.__Bomber!:Crag#1242"
                   },
-                  "8f57fb6e-7772-49c2-9643-4edd54d11e96": {
+                  "image:15": {
                         "title": "The Top of Great Red Gully.",
                         "source": "https://imgcdn.ukc2.com/i/147533?fm=webp&time=1587543586&s=ec153c9bb2ab86a0091073c96089cccc",
                         "s3_object_name": "The_Top_of_Great_Red_Gully.:Crag#1242"

@@ -7,14 +7,13 @@ import json
 
 class TestScraper(unittest.TestCase):
     def test_accept_cookies(self):
-        actual_value = self.test_scraper.load_and_accept_cookies(headless = False)
+        actual_value = self.test_scraper.load_and_accept_cookies(headless = True)
         expected_value = "Cookies Accepted"
         self.assertEqual(expected_value,actual_value)
         
-
     def setUp(self):
         self.test_scraper = scraper()
-        self.test_scraper.load_and_accept_cookies(headless = False)
+        self.test_scraper.load_and_accept_cookies(headless = True)
         self.ukc_database = uploadto_aws.aws_client("ukc-data")
     
     def test_get_guidebooks(self):
@@ -41,8 +40,14 @@ class TestScraper(unittest.TestCase):
 
     def test_get_routes(self):
         first_crag = {"crag_URL":"https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/"}
-        actual_value = self.test_scraper.get_routes(first_crag,self.ukc_database, check_db= False)
-        expected_value = json.load(open("first_crag.json"))["crag:0"]["climbs"]
+        actual_value = self.test_scraper.get_routes(first_crag,self.ukc_database, check_db= False)["route:1"]
+        expected_value = json.load(open("first_crag.json"))["crag:0"]["climbs"]["route:1"]
+        self.assertEqual(expected_value,actual_value)
+
+    def test_get_images(self):
+        first_crag = {"crag_URL":"https://www.ukclimbing.com/logbook/crags/the_exmoor_coast_traverse-1242/","crag_uid":"1242"}
+        actual_value = self.test_scraper.get_cragPics(first_crag,self.ukc_database, check_db= False)["image:0"]
+        expected_value = json.load(open("first_crag.json"))["crag:0"]["images"]["image:0"]
         self.assertEqual(expected_value,actual_value)
 
 
@@ -50,15 +55,3 @@ class TestScraper(unittest.TestCase):
 if __name__ == "__main__":
 
     unittest.main()
-
-
-
-    
-    # if type(test.get_routes(crag[first_crag])) != dict: #test 6 to see if correct output is recieved
-    #     test_failed.append(True)
-    #     print("test 6 failed")
-    # if type(test.get_cragPics(crag[first_crag])) != dict: #test 7 to see if correct output is recieved
-    #     test_failed.append(True)
-    #     print("test 7 failed")
-    
-    # print(f"testing complete: {len(test_failed)} failed tests")

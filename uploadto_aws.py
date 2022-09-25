@@ -1,5 +1,5 @@
-from pickle import FALSE
-from select import select
+#from pickle import FALSE
+#from select import select
 import boto3
 import botocore
 import requests

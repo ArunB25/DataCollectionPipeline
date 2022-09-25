@@ -1,14 +1,6 @@
-from ast import main
-from cgitb import text
-from itertools import count
-from lib2to3.pgen2 import driver
-from multiprocessing.sharedctypes import Value
-from turtle import tilt, title
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
-from tabulate import tabulate
-import uuid
 import json
 import uploadto_aws
 from selenium.webdriver.chrome.options import Options
@@ -158,14 +150,15 @@ class scraper:
         time.sleep(1)
         photos_list = self.driver.find_elements(By.XPATH, '//a[@class = "photoswipe"]')
         images = {}
+        image_count = 0
         for photo in photos_list:
             img_thumbnail = photo.find_element(By.CLASS_NAME, 'img-fluid')
             title = (img_thumbnail.get_attribute('alt')).split('<',1)[0]
             object_name = "{}:Crag#{}".format(title,crag_uid).replace(" ","_")
             if image_storage.isin_s3(object_name) != "object does exist" or check_db == False:
                 photo_src = photo.get_attribute('data-image')
-                img_uuid = str(uuid.uuid4())
-                images[img_uuid] = {"title":title, "source":photo_src,"s3_object_name":object_name}
+                images[f"image:{image_count}"] = {"title":title, "source":photo_src,"s3_object_name":object_name}
+                image_count += 1
             else:
                 print(f"image {title} already exists in s3")
         return(images)
@@ -186,8 +179,8 @@ if __name__ == "__main__":
     eng_climbs.guidebooks = eng_climbs.get_guidebooks("England")
     ukc_database = uploadto_aws.aws_client("ukc-data")
     UploadToDB = True
-    for index in range(0,1):
-        crags_dict = eng_climbs.get_crags(eng_climbs.guidebooks[index])
+    for guidebook in  eng_climbs.guidebooks:
+        crags_dict = eng_climbs.get_crags(guidebook)
         crag_list = list(crags_dict.keys())
         for crag in crag_list:
             print(crags_dict[crag]["crag_name"])
