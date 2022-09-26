@@ -11,15 +11,17 @@ class scraper:
         headless = True or False
         Opens on a chrome web drive UKC and accept the cookies.
         '''
+        chromeOptions = Options()
+        chromeOptions.add_argument('--no-sandbox')
+        chromeOptions.add_argument('--disable-dev-shm-usage')
         if headless == True:
-            chromeOptions = Options()
             chromeOptions.headless = True
         else:
-            chromeOptions = Options()
             chromeOptions.headless = False
 
+
         try:
-            self.driver = webdriver.Chrome(chrome_options=chromeOptions) 
+            self.driver = webdriver.Chrome(options=chromeOptions) 
             URL = "https://www.ukclimbing.com/logbook/books/"
             self.driver.get(URL)
             time.sleep(1) 
@@ -34,7 +36,7 @@ class scraper:
         """
         scrapes the current page for all the guidebooks of the specified country and returns a list of there URLs
         """    
-        country_element = self.__does_guidebook_country_exist(input_country)
+        country_element = self.does_guidebook_country_exist(input_country)
         if country_element == "country not found":
             return("country not found")
         elif country_element == "invalid input":
@@ -54,7 +56,7 @@ class scraper:
             return(guidebook_links)
             
 
-    def __does_guidebook_country_exist(self,input_country):  
+    def does_guidebook_country_exist(self,input_country):  
         """
         searches for the input country through the list of countries with guidebooks
         """
@@ -131,8 +133,8 @@ class scraper:
                         route_stars = "None"
                     num_route += 1
                     routes_dict[f"route:{num_route}"] = {"route_uid":route_uid,"name":route_name,"URL":route_URL,"type":route_type,"grade":route_grade,"stars":route_stars,"buttress":buttress}
-                else:
-                    print(f"Route with uid:{route_uid}, Already in database")
+                #else:
+                    #print(f"Route with uid:{route_uid}, Already in database")
             else:
                 print("what is this row????")
         return(routes_dict)
@@ -154,13 +156,14 @@ class scraper:
         for photo in photos_list:
             img_thumbnail = photo.find_element(By.CLASS_NAME, 'img-fluid')
             title = (img_thumbnail.get_attribute('alt')).split('<',1)[0]
-            object_name = "{}:Crag#{}".format(title,crag_uid).replace(" ","_")
+            object_name = "{}:Crag#{}".format(title,crag_uid).replace(","," ")
+            object_name = object_name.replace(" ","_")
             if image_storage.isin_s3(object_name) != "object does exist" or check_db == False:
                 photo_src = photo.get_attribute('data-image')
                 images[f"image:{image_count}"] = {"title":title, "source":photo_src,"s3_object_name":object_name}
                 image_count += 1
-            else:
-                print(f"image {title} already exists in s3")
+            #else:
+               #print(f"image {title} already exists in s3")
         return(images)
     
     def save_dictionary(self, dictionary, name):
@@ -175,30 +178,31 @@ class scraper:
 if __name__ == "__main__":
     
     eng_climbs = scraper()
-    eng_climbs.load_and_accept_cookies(headless = True)
-    eng_climbs.guidebooks = eng_climbs.get_guidebooks("England")
-    ukc_database = uploadto_aws.aws_client("ukc-data")
-    UploadToDB = True
-    for guidebook in  eng_climbs.guidebooks:
-        crags_dict = eng_climbs.get_crags(guidebook)
-        crag_list = list(crags_dict.keys())
-        for crag in crag_list:
-            print(crags_dict[crag]["crag_name"])
-            climbs_dict = eng_climbs.get_routes(crags_dict[crag],ukc_database,UploadToDB)
-            crags_dict[crag]["climbs"] = climbs_dict
-            if len(climbs_dict) > 0 and UploadToDB == True:
-                ukc_database.create_dataframe(crags_dict[crag],upload=True)
-            else:
-                print("Upload turned off or no climbs from crag, may already be in database")
-            image_dict = eng_climbs.get_cragPics(crags_dict[crag],ukc_database,UploadToDB)
-            crags_dict[crag]["images"] = image_dict
-            if len(image_dict) > 0 and UploadToDB == True:
-                image_list = list(image_dict.keys())
-                crag_uid = crags_dict[crag]["crag_uid"]
-                for image in image_list:
-                    ukc_database.upload_src_image(image_dict[image]["source"],image_dict[image]["s3_object_name"])
-            else:
-                print("all images from crag already in s3")
+    if eng_climbs.load_and_accept_cookies(headless = True) == "Cookies Accepted":
+        eng_climbs.guidebooks = eng_climbs.get_guidebooks("England")
+        ukc_database = uploadto_aws.aws_client("ukc-data")
+        UploadToDB = True
+        # for guidebook in  eng_climbs.guidebooks:
+        for index in range(3,4):
+            guidebook = eng_climbs.guidebooks[index]
+            crags_dict = eng_climbs.get_crags(guidebook)
+            crag_list = list(crags_dict.keys())
+            for crag in crag_list:
+                print(crags_dict[crag]["crag_name"])
+                climbs_dict = eng_climbs.get_routes(crags_dict[crag],ukc_database,UploadToDB)
+                crags_dict[crag]["climbs"] = climbs_dict
+                if len(climbs_dict) > 0 and UploadToDB == True:
+                    ukc_database.create_dataframe(crags_dict[crag],upload=True)
+                else:
+                    print("Upload turned off or no climbs from crag, may already be in database")
+                image_dict = eng_climbs.get_cragPics(crags_dict[crag],ukc_database,UploadToDB)
+                crags_dict[crag]["images"] = image_dict
+                if len(image_dict) > 0 and UploadToDB == True:
+                    ukc_database.upload_images_s3(image_dict)
+                else:
+                    print("all images from crag already in s3")
+    else:
+        print("ERROR Accepting Cookies")
 
 
 

@@ -4,18 +4,27 @@ import boto3
 import botocore
 import requests
 import pandas as pd
+import psycopg2
 from sqlalchemy import create_engine
 
 
 class aws_client:
     def __init__(self,s3bucket_name):
         """
-        set up s3 client and sets bucket
+        set up s3 client with bucket and engine for psycopg2 
         """
-        self.s3_client = boto3.client('s3')
-        self.s3 = boto3.resource('s3')
+        ACCESS_ID ="AKIAVSD366RWY6UENEPR"
+        ACCESS_KEY = "xDqP/ihsL/UIZPxwBo3COs3ptsxKd0fZgKUQD0Ru"
+        
+        session= boto3.Session(aws_access_key_id=ACCESS_ID,
+                                    aws_secret_access_key= ACCESS_KEY,
+                                    region_name='eu-west-2')
+        self.s3 = session.resource('s3')
+
+        self.s3_client = session.client('s3')
         self.bucket_string = s3bucket_name
         
+
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
         ENDPOINT = 'ukc-database-datacollectionpipeline.cg8b8vgge9xb.eu-west-2.rds.amazonaws.com' # Change it to your AWS endpoint
@@ -25,17 +34,20 @@ class aws_client:
         DATABASE = 'postgres'
         self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}") 
 
-    def upload_src_image(self,img_url,obj_name):
+    def upload_images_s3(self,img_dict):
         """
-        requests image from image source URL and directly uploads to s3 storage without downloading loacally
+        for each image in image dictionary requests image from image source URL and directly uploads to s3 storage without downloading loacally
         """
-        try:
-            image = requests.get(img_url, stream=True)
-            self.s3_client.upload_fileobj(image.raw, self.bucket_string, obj_name)
-            print("Image Upload Successful")       
+        image_list = list(img_dict.keys())
+        for image in image_list:
+            # try:
+                image_file = requests.get(img_dict[image]["source"], stream=True)
+                object_name = img_dict[image]['s3_object_name']
+                self.s3_client.upload_fileobj(image_file.raw, self.bucket_string, object_name)
+                print("Image Upload Successful")       
 
-        except :
-           print("The file was not found or other Error")
+            # except :
+            #     print("The Image file was not found or other Error")
            
     def isin_s3(self,object_name):
         """
