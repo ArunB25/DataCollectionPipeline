@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 import json
+
+from sqlalchemy import null
 import uploadto_aws
 from selenium.webdriver.chrome.options import Options
 class scraper:
@@ -47,13 +49,15 @@ class scraper:
             all_guidebooks = guidebook_card.find_elements(By.TAG_NAME, 'li')    #get list of all guide books in specified country
             OutofPrint_list = guidebook_card.find_elements(By.XPATH, './/li[@title = "Out of print"]')  #get list of all out of print guide books in specified country
             guidebooks_inprint = [x for x in all_guidebooks if x not in OutofPrint_list] #remove guide books that are no longer being printed
-            guidebook_links = []
+            guidebooks_links = {}
+            guidebook_num = 0
             for guide in guidebooks_inprint: #gets links for all guidebooks
                 a_tag = guide.find_element(by=By.TAG_NAME, value='a')
-                guidebook_links.append(a_tag.get_attribute('href'))
+                guidebooks_links[guidebook_num] = a_tag.get_attribute('href')
+                guidebook_num += 1
 
-            print(f"{len(guidebook_links)} guidebooks in print in {input_country}")
-            return(guidebook_links)
+            print(f"{len(guidebooks_links)} guidebooks in print in {input_country}")
+            return(guidebooks_links)
             
 
     def does_guidebook_country_exist(self,input_country):  
@@ -66,7 +70,7 @@ class scraper:
                 a_tag = country.find_element(By.TAG_NAME, 'a')
                 a_text = (a_tag.text).split(' ',1)[0]
                 if input_country.lower() == a_text.lower():  #if country matches inputed country break
-                    print(a_text)
+                    self.country = a_text
                     return(country)              
             return("country not found")
         else:
@@ -95,7 +99,7 @@ class scraper:
                     crag_uid = crag_url.split('=')[-1]
                     crag_name = a_tag.text
                     crag_rocktype = row.find_element(By.XPATH, './td[3]').text
-                    crags[(f"crag:{idx}")] = {"crag_uid":crag_uid,"crag_name":crag_name,"crag_URL":crag_url,"rocktype":crag_rocktype, "guidebook":guidebook_title,"guidebook_URL":guidebook_URL}
+                    crags[(f"crag:{idx}")] = {"crag_uid":crag_uid,"crag_name":crag_name,"crag_URL":crag_url,"rocktype":crag_rocktype, "guidebook":guidebook_title,"guidebook_URL":guidebook_URL,"country":self.country}
             return(crags)
         else:   
             print(f"no crags in guidebook: {guidebook_title}")
@@ -117,7 +121,7 @@ class scraper:
             if row in buttress_list:
                 buttress = row.find_element(By.TAG_NAME, 'h5').text
             elif row not in buttress_list:
-                a_tag = row.find_element(By.XPATH, './/*[@class = "small not-small-md main_link "]')
+                a_tag = row.find_element(By.XPATH, './/*[@class = "small not-small-md main_link "]')   
                 route_URL = a_tag.get_attribute('href')
                 route_uid = route_URL.split('-')[-1]
                 if database_engine.isin_database(route_uid,"route_uid") == False or check_db == False:
@@ -173,29 +177,69 @@ class scraper:
         with open(f"{name}.json", "w") as write_file:   
             json.dump(dictionary, write_file, indent=6)
 
-
+    def guidebooks_to_scrape(self):
+        guides_input = ""
+        while True:
+            guides_input = input("Would you like to scrape all the guidebooks and get all routes or selects specific ones? Type: (all) or (select): ")
+            if guides_input == "all":
+                return(range(0,len(self.guidebooks)))
+            elif guides_input == "select":
+                for key in list(self.guidebooks.keys()):
+                    guidebook_name = self.guidebooks[key].rsplit("/")[-1]
+                    guidebook_name = guidebook_name.rsplit("-")[0]
+                    print(key,":",guidebook_name)
+                max_key = key
+                print("max key: ", max_key)
+                guides_to_scrape_input = input("type the guidebooks reference number you want, if multiple seperate with space:")
+                guides_to_scrape_input = guides_to_scrape_input.split()
+                guides_to_scrape = []
+                for guide_num in guides_to_scrape_input:
+                    try:
+                        guides_to_scrape.append(int(guide_num))
+                    except:
+                        print(guide_num, "not a valid guidebook reference number, not including in search")
+                guides_to_scrape = [*set(guides_to_scrape)] #deletes duplicate values
+                scrape_list = [x for x in guides_to_scrape if x <= max_key and x >= 0] # remove values higher than the number of guide books 
+                print("scraping guides:",scrape_list)
+                return(scrape_list)
+            
 
 if __name__ == "__main__":
     
-    eng_climbs = scraper()
-    if eng_climbs.load_and_accept_cookies(headless = True) == "Cookies Accepted":
-        eng_climbs.guidebooks = eng_climbs.get_guidebooks("England")
+    ukc_routes = scraper()
+    if ukc_routes.load_and_accept_cookies(headless = True) == "Cookies Accepted":
+        ukc_routes.guidebooks = ""
+        while type(ukc_routes.guidebooks) != dict:
+            country = str(input("Enter what country you would like the guidebooks for: "))
+            ukc_routes.guidebooks = ukc_routes.get_guidebooks(country)
+            if type(ukc_routes.guidebooks) == str:
+                print(ukc_routes.guidebooks)
+        guides_to_scrape = ukc_routes.guidebooks_to_scrape()
         ukc_database = uploadto_aws.aws_client("ukc-data")
-        UploadToDB = True
-        # for guidebook in  eng_climbs.guidebooks:
-        for index in range(3,4):
-            guidebook = eng_climbs.guidebooks[index]
-            crags_dict = eng_climbs.get_crags(guidebook)
+        while True:
+            upload_input = input("upload to database (y) or (n): ") == "y"
+            if upload_input == "y":
+                UploadToDB = True
+                print("uploading and checking database")
+                break
+            else:
+                UploadToDB = False
+                print("Not uploading to or checking database")
+                break
+        # for guidebook in  ukc_routes.guidebooks:
+        for index in guides_to_scrape:
+            guidebook_link = ukc_routes.guidebooks[index]
+            crags_dict = ukc_routes.get_crags(guidebook_link)
             crag_list = list(crags_dict.keys())
             for crag in crag_list:
                 print(crags_dict[crag]["crag_name"])
-                climbs_dict = eng_climbs.get_routes(crags_dict[crag],ukc_database,UploadToDB)
+                climbs_dict = ukc_routes.get_routes(crags_dict[crag],ukc_database,UploadToDB)
                 crags_dict[crag]["climbs"] = climbs_dict
                 if len(climbs_dict) > 0 and UploadToDB == True:
                     ukc_database.create_dataframe(crags_dict[crag],upload=True)
                 else:
                     print("Upload turned off or no climbs from crag, may already be in database")
-                image_dict = eng_climbs.get_cragPics(crags_dict[crag],ukc_database,UploadToDB)
+                image_dict = ukc_routes.get_cragPics(crags_dict[crag],ukc_database,UploadToDB)
                 crags_dict[crag]["images"] = image_dict
                 if len(image_dict) > 0 and UploadToDB == True:
                     ukc_database.upload_images_s3(image_dict)
