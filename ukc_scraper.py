@@ -84,6 +84,7 @@ class scraper:
         time.sleep(1)
         mainbody = self.driver.find_element(By.XPATH, '//*[@class = "col-md-12"]')
         guidebook_title = mainbody.find_element(By.TAG_NAME, 'h1').text
+        print("Scraping crags from ",guidebook_title)
         crag_tables = self.driver.find_elements(By.XPATH, '//*[@class = "col-sm-6"]')
         if len(crag_tables) > 0:
             rows = []
@@ -94,6 +95,7 @@ class scraper:
             crag_rows = [x for x in rows if x not in headers] #Remove headers from rows
             crags = {}
             for idx, row in enumerate(crag_rows):
+                if len(row.find_elements(By.TAG_NAME, "td")) > 1:
                     a_tag = row.find_element(By.TAG_NAME, 'a')
                     crag_url = a_tag.get_attribute('href')
                     crag_uid = crag_url.split('=')[-1]

@@ -13,8 +13,8 @@ class aws_client:
         """
         set up s3 client with bucket and engine for psycopg2 
         """
-        ACCESS_ID ="AKIAVSD366RWY6UENEPR"
-        ACCESS_KEY = "xDqP/ihsL/UIZPxwBo3COs3ptsxKd0fZgKUQD0Ru"
+        ACCESS_ID = input("Enter AWS S3 Access ID: ")
+        ACCESS_KEY = input("Enter AWS S3 Access Key: ")
         
         session= boto3.Session(aws_access_key_id=ACCESS_ID,
                                     aws_secret_access_key= ACCESS_KEY,
@@ -29,7 +29,7 @@ class aws_client:
         DBAPI = 'psycopg2'
         ENDPOINT = 'ukc-database-datacollectionpipeline.cg8b8vgge9xb.eu-west-2.rds.amazonaws.com' # Change it to your AWS endpoint
         USER = 'postgres'
-        PASSWORD = 'Aicore123'
+        PASSWORD = input("Enter AWS RDS Password")
         PORT = 5432
         DATABASE = 'postgres'
         self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}") 
@@ -76,7 +76,7 @@ class aws_client:
         Takes crag dictionary and transfers data into a dataframe. Has the option to upload to AWS RDS.
         """
         if "climbs" in data:
-            crag_details = {key: data[key] for key in data.keys() & {"crag_uid","crag_name","crag_URL","rocktype", "guidebook","guidebook_URL"}}
+            crag_details = {key: data[key] for key in data.keys() & {"crag_uid","crag_name","crag_URL","rocktype", "guidebook","guidebook_URL","country"}}
             crag_df = pd.DataFrame(crag_details,index=[0])
             climbs_df = pd.DataFrame(data["climbs"]).T
             crag_df = pd.concat([crag_df]*(len(climbs_df)))
