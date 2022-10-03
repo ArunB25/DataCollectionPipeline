@@ -240,7 +240,7 @@ if __name__ == "__main__":
                 if len(climbs_dict) > 0 and UploadToDB == True:
                     ukc_database.create_dataframe(crags_dict[crag],upload=True)
                 else:
-                    print("Upload turned off or no climbs from crag, may already be in database")
+                    print("Routes from crag may already be in database or Upload turned off")
                 image_dict = ukc_routes.get_cragPics(crags_dict[crag],ukc_database,UploadToDB)
                 crags_dict[crag]["images"] = image_dict
                 if len(image_dict) > 0 and UploadToDB == True:
