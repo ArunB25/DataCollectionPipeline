@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 
 
 class aws_client:
-    def __init__(self,s3bucket_name):
+    def __init__(self):
         """
         set up s3 client with bucket and engine for psycopg2 
         """
@@ -22,14 +22,14 @@ class aws_client:
         self.s3 = session.resource('s3')
 
         self.s3_client = session.client('s3')
-        self.bucket_string = s3bucket_name
+        self.bucket_string = "ukc-images"
         
 
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
-        ENDPOINT = 'ukc-database-datacollectionpipeline.cg8b8vgge9xb.eu-west-2.rds.amazonaws.com' # Change it to your AWS endpoint
+        ENDPOINT = 'ukc-routes.c5dmobddqeyc.eu-west-2.rds.amazonaws.com' # Change it to your AWS endpoint
         USER = 'postgres'
-        PASSWORD = input("Enter AWS RDS Password")
+        PASSWORD = input("Enter AWS RDS Password: ")
         PORT = 5432
         DATABASE = 'postgres'
         self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}") 
@@ -104,12 +104,15 @@ class aws_client:
 
     def isin_database(self,value,column):
        with self.engine.connect() as connection:
-        result = connection.execute("SELECT * FROM routes_dataset WHERE routes_dataset.{} = '{}'".format(column,value))
-        if result.fetchone() == None:
-
+        try:
+            result = connection.execute("SELECT * FROM routes_dataset WHERE routes_dataset.{} = '{}'".format(column,value))
+            if result.fetchone() == None:
+                return(False)
+            else:
+                return(True)
+        except:
+            print(f"Error checking if route {value} is in database (database might not exist) Program will continue")
             return(False)
-        else:
-            return(True)
 
         
 

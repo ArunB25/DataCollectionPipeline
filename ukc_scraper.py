@@ -217,14 +217,14 @@ if __name__ == "__main__":
             if type(ukc_routes.guidebooks) == str:
                 print(ukc_routes.guidebooks)
         guides_to_scrape = ukc_routes.guidebooks_to_scrape()
-        ukc_database = uploadto_aws.aws_client("ukc-data")
+        ukc_database = uploadto_aws.aws_client()
         while True:
-            upload_input = input("upload to database (y) or (n): ") == "y"
+            upload_input = input("upload to database (y) or (n): ")
             if upload_input == "y":
                 UploadToDB = True
                 print("uploading and checking database")
                 break
-            else:
+            elif upload_input == "n":
                 UploadToDB = False
                 print("Not uploading to or checking database")
                 break
