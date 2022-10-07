@@ -6,6 +6,7 @@ import requests
 import pandas as pd
 import psycopg2
 from sqlalchemy import create_engine
+import os
 
 
 class aws_client:
@@ -13,8 +14,8 @@ class aws_client:
         """
         set up s3 client with bucket and engine for psycopg2 
         """
-        ACCESS_ID = input("Enter AWS S3 Access ID: ")
-        ACCESS_KEY = input("Enter AWS S3 Access Key: ")
+        ACCESS_ID = os.environ.get('S3_ACCESS_ID')
+        ACCESS_KEY = os.environ.get('S3_ACCESS_KEY')
         
         session= boto3.Session(aws_access_key_id=ACCESS_ID,
                                     aws_secret_access_key= ACCESS_KEY,
@@ -29,7 +30,7 @@ class aws_client:
         DBAPI = 'psycopg2'
         ENDPOINT = 'ukc-routes.c5dmobddqeyc.eu-west-2.rds.amazonaws.com' # Change it to your AWS endpoint
         USER = 'postgres'
-        PASSWORD = input("Enter AWS RDS Password: ")
+        PASSWORD = os.environ.get('RDS_PASSWORD')
         PORT = 5432
         DATABASE = 'postgres'
         self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{ENDPOINT}:{PORT}/{DATABASE}") 
