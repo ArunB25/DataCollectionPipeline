@@ -14,7 +14,7 @@ class TestScraper(unittest.TestCase):
     def setUp(self):
         self.test_scraper = scraper()
         self.test_scraper.load_and_accept_cookies(headless = True)
-        self.ukc_database = uploadto_aws.aws_client("ukc-data")
+        self.ukc_database = uploadto_aws.aws_client()
     
     def test_get_guidebooks(self):
         expected_value = "invalid input"
@@ -25,17 +25,18 @@ class TestScraper(unittest.TestCase):
         actual_value = self.test_scraper.get_guidebooks("ENG")
         self.assertEqual(expected_value,actual_value)
 
-        expected_value = list
+        expected_value = dict
         actual_value = type(self.test_scraper.get_guidebooks("England"))
         self.assertEqual(expected_value,actual_value)
 
     def test_get_crags(self):
+        self.test_scraper.country = "England"
         actual_value = self.test_scraper.get_crags("https://www.ukclimbing.com/logbook/books/baggy_climbing_guide-62")
         expected_value = {}
         self.assertEqual(expected_value,actual_value)
 
         actual_value = list(self.test_scraper.get_crags("https://www.ukclimbing.com/logbook/books/a_climbers_guide_to_the_exmoor_coast_traverse-2237")["crag:0"])
-        expected_value = ["crag_uid","crag_name","crag_URL","rocktype","guidebook","guidebook_URL"]
+        expected_value = ["crag_uid","crag_name","crag_URL","rocktype","guidebook","guidebook_URL","country"]
         self.assertEqual(expected_value,actual_value)
 
     def test_get_routes(self):
